@@ -48,6 +48,8 @@
       return {ok:true,provider:'firebase',user:{id:result.localId,email:result.email},token:result.idToken,refreshToken:result.refreshToken,tokenExpires:Date.now()+Number(result.expiresIn)*1000,expires:Date.now()+7*86400000};
     }
     if(path==='logout')return {ok:true};
+    if(path==='identity')return (await post(auth+'lookup?key='+encodeURIComponent(config.apiKey),{idToken:await token(selected)})).users?.[0];
+    if(path==='verifyEmail')return post(auth+'sendOobCode?key='+encodeURIComponent(config.apiKey),{requestType:'VERIFY_EMAIL',idToken:await token(selected)});
     if(path!=='state')throw new Error('Acción de cuenta inválida.');
     const remote=await read(selected);
     if(data===undefined)return remote;
@@ -71,5 +73,5 @@
     try{await post(auth+'sendOobCode?key='+encodeURIComponent(config.apiKey),{requestType:'PASSWORD_RESET',email});}
     catch(error){if(error.code!=='EMAIL_NOT_FOUND')throw error;}
   }
-  window.AdeFirebase=Object.freeze({available,request,resetPassword});
+  window.AdeFirebase=Object.freeze({available,request,resetPassword,authorize:token});
 })();

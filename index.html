@@ -877,10 +877,11 @@
     <div class="modal-backdrop" data-close-login=""></div>
     <form class="modal-card" id="adminLoginForm">
       <div class="modal-header"><div><span class="eyebrow">Acceso privado</span><h2>Panel administrador</h2></div><button class="icon-only" type="button" data-close-login="" aria-label="Cerrar acceso administrador">×</button></div>
-      <label><span>Correo administrador</span><input id="adminEmailInput" type="email" autocomplete="username" placeholder="correo autorizado"></label>
-      <label><span>Contraseña</span><input id="adminPasswordInput" type="password" autocomplete="current-password" placeholder="Ingresa la contraseña"></label>
+      <label><span>Correo administrador</span><input id="adminEmailInput" type="email" autocomplete="username" placeholder="correo autorizado" required></label>
+      <label><span>Contraseña</span><input id="adminPasswordInput" type="password" autocomplete="current-password" placeholder="Ingresa la contraseña" required></label>
       <p class="admin-security-note">Acceso privado de ASO ADE. Tu contraseña se verifica en el servidor y la sesión se cierra tras 30 minutos de inactividad.</p>
       <div class="modal-actions"><button class="btn-secondary" type="button" data-close-login="">Cancelar</button><button class="btn-primary" type="submit">Entrar</button></div>
+      <div id="adminCloudActions" hidden><p class="admin-security-note">Si es la primera vez, crea la cuenta de la ASO en Perfil. Si falta verificarla, envía el enlace y ábrelo desde el Gmail de la ASO.</p><button class="btn-secondary" type="button" id="adminVerifyEmailButton">Enviar verificación</button></div>
     </form>
   </div>
 
@@ -935,9 +936,9 @@
     <div><button class="btn-secondary" type="button" data-preview-exit>Volver al editor</button><button class="btn-primary" type="button" data-preview-publish>Publicar portada</button></div>
   </div>
   <button class="back-to-top" id="backToTopButton" type="button" aria-label="Volver arriba">↑</button>
-  <script src="public-config.js" defer></script><script src="runtime.js" defer></script><script src="firebase-config.js" defer></script><script src="firebase-student.js" defer></script><script src="student-store.js?v=2" defer></script>
+  <script src="public-config.js" defer></script><script src="runtime.js" defer></script><script src="firebase-config.js" defer></script><script src="firebase-student.js?v=admin-1" defer></script><script src="student-store.js?v=admin-1" defer></script><script src="firebase-admin.js?v=1" defer></script>
   <script src="vendor/purify.min.js" defer></script><script src="experience.js?v=pro-4" defer></script><script src="constants.js?v=ade-v2" defer></script>
-  <script src="curriculum.js?v=2" defer></script><script src="portal.js?v=mobile-2" defer></script><script src="admin.js?v=adm-1" defer></script><script src="student-account.js?v=1" defer></script>
+  <script src="curriculum.js?v=2" defer></script><script src="portal.js?v=cloud-admin-1" defer></script><script src="admin.js?v=cloud-1" defer></script><script src="student-account.js?v=1" defer></script>
 
 </body>
 </html>

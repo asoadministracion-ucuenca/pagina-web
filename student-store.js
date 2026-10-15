@@ -185,6 +185,12 @@
   }
   window.AdeStudent = Object.freeze({
     keys,storage,flush,refresh,signIn,signOut,resolveConflict,importValues,
+    async authorizeRequest(){
+      if(!firebase||!session)throw new Error('Inicia sesión en Perfil para enviar tu solicitud.');
+      const selected=session,token=await window.AdeFirebase.authorize(selected);
+      if(selected!==session)throw new Error('La sesión cambió. Vuelve a enviar la solicitud.');
+      window.sessionStorage.setItem(sessionKey,JSON.stringify(selected));return token;
+    },
     snapshot:()=>snapshot(), guestSnapshot:()=>snapshot('guest'),
     getState:()=>({user:session?.user||null,status,conflict:Boolean(conflict),pending:Object.keys(pending).length})
   });

@@ -398,7 +398,7 @@ function openAdminPanel() {
   admState.lastPoll = Date.now();
   admState.pollTimer = setInterval(() => {
     const pending = (appData.messages || []).some(message => message.emailStatus === 'enviando');
-    if (!el.adminPanel.hidden && document.visibilityState === 'visible' && !admState.refreshing && Date.now() - admState.lastPoll >= (pending ? 3000 : 60_000)) {
+    if (!el.adminPanel.hidden && document.visibilityState === 'visible' && !admState.refreshing && Date.now() - admState.lastPoll >= (window.AdeCloudAdmin?.available ? 300000 : pending ? 3000 : 60_000)) {
       admState.lastPoll = Date.now();
       refreshAdminData({ silent: true });
     }
@@ -752,6 +752,9 @@ function renderField(field, record) {
   const described = `aria-describedby="${field.help ? id + '-help ' : ''}${id}-error"`;
   const wrap = (control, extra = '') => `<div class="adm-field ${field.full ? 'full' : ''} ${extra}"><label for="${id}">${esc(field.label)}${required}</label>${control}${help}${error}</div>`;
   const common = `id="${id}" name="${field.name}" ${field.required ? 'required aria-required="true"' : ''} ${described}`;
+  if(window.AdeCloudAdmin?.available&&['image','file','urls'].includes(field.type)){
+    return wrap(field.type==='urls'?`<textarea ${common} rows="3" placeholder="Enlaces HTTPS separados por punto y coma">${esc(value)}</textarea>`:`<input ${common} type="url" value="${attr(value)}" placeholder="https://…"><small class="adm-help">Sube el archivo a Google Drive y pega aquí el enlace público. Para una imagen, utiliza un enlace HTTPS que muestre la imagen.</small>`);
+  }
   switch (field.type) {
     case 'textarea': return wrap(`<textarea ${common} rows="${field.max > 1000 ? 6 : 4}" ${field.max ? `maxlength="${field.max}"` : ''} placeholder="${attr(field.placeholder || '')}">${esc(value)}</textarea>${field.max ? `<span class="adm-counter" data-counter-for="${field.name}">${String(value).length}/${field.max}</span>` : ''}`);
     case 'select': {
@@ -934,7 +937,7 @@ function renderAdmInbox() {
   const counts = Object.fromEntries(MESSAGE_TYPES.map(([type]) => [type, messages.filter(message => (type === 'all' || message.type === type) && ADM.isOpen(message)).length]));
   const statuses = [...new Set(Object.values(MESSAGE_FLOW).flat())];
   return `${pageHead({ kicker: 'Atención institucional', title: 'Bandeja', text: 'Consultas, inscripciones y reservas guardadas de forma privada en el servidor.', actions: `<button class="adm-btn ghost" type="button" data-adm-refresh>${icon('refresh')}<span>Actualizar</span></button><button class="adm-btn ghost" type="button" data-adm-export ${rows.length ? '' : 'disabled'}>${icon('download')}<span>Exportar CSV (${rows.length})</span></button>` })}
-    <div class="adm-tabs" role="tablist" aria-label="Tipo de solicitud">${MESSAGE_TYPES.map(([type, label]) => `<button type="button" role="tab" aria-selected="${filters.type === type}" class="${filters.type === type ? 'active' : ''}" data-adm-inbox-type="${attr(type)}">${esc(label)}${counts[type] ? `<span class="adm-tab-count">${counts[type]}</span>` : ''}</button>`).join('')}</div>
+    ${adminServerState?.inboxHasMore ? '<p class="adm-muted">Se muestran las 200 solicitudes más recientes. El respaldo incluye toda la bandeja.</p>' : ''}<div class="adm-tabs" role="tablist" aria-label="Tipo de solicitud">${MESSAGE_TYPES.map(([type, label]) => `<button type="button" role="tab" aria-selected="${filters.type === type}" class="${filters.type === type ? 'active' : ''}" data-adm-inbox-type="${attr(type)}">${esc(label)}${counts[type] ? `<span class="adm-tab-count">${counts[type]}</span>` : ''}</button>`).join('')}</div>
     <div class="adm-toolbar">
       <label class="adm-search-field">${icon('search')}<input type="search" value="${attr(filters.query)}" placeholder="Buscar por nombre, correo, código o texto…" data-adm-inbox="query" aria-label="Buscar en la bandeja"></label>
       <select class="adm-select" data-adm-inbox="status" aria-label="Estado"><option value="abiertas" ${filters.status === 'abiertas' ? 'selected' : ''}>Abiertas</option><option value="all" ${filters.status === 'all' ? 'selected' : ''}>Todos los estados</option>${statuses.map(status => `<option value="${attr(status)}" ${filters.status === status ? 'selected' : ''}>${esc(status[0].toUpperCase() + status.slice(1))}</option>`).join('')}</select>
@@ -967,7 +970,7 @@ function renderMessageDetail(message) {
   const waLink = wa ? `https://wa.me/${wa}?text=${encodeURIComponent(`Hola ${firstName}, te escribimos de la ASO de Administración de Empresas${code ? ` sobre tu solicitud ${code}` : ''}.`)}` : '';
   const history = Array.isArray(message.history) && message.history.length ? message.history : [{ date: message.date, status: 'pendiente', actor: 'Formulario público' }];
   const fields = [['Correo', message.email], ['Teléfono', phone], ['Ciclo', message.cycle], ['Asunto', message.subject], ['Materia', message.materia], ['Producto', message.producto]].filter(([, value]) => value);
-  const email = message.type === 'Consulta' ? (message.emailStatus === 'enviado'
+  const email = message.type === 'Consulta' && window.AdeCloudAdmin?.available ? `<div class="adm-callout info">${icon('inbox')}<div><strong>Consulta recibida en la bandeja ASO</strong><p>El seguimiento y las notas se guardan en Firebase. La copia automática al Gmail de la ASO todavía no está conectada.</p></div></div>` : message.type === 'Consulta' ? (message.emailStatus === 'enviado'
     ? `<div class="adm-callout ok">${icon('check')}<div><strong>Envío de correo confirmado</strong><p>Apps Script confirmó el envío a asoadmiucuenca@gmail.com.</p></div></div>`
     : message.emailStatus === 'sin configurar'
       ? `<div class="adm-callout warn">${icon('alert')}<div><strong>El reenvío por correo no está configurado</strong><p>La consulta está guardada aquí. Para recibir una copia en asoadmiucuenca@gmail.com, despliega la versión actual del Apps Script (README → «Consultas al correo de la ASO») y configura la URL en Integraciones.</p><button type="button" class="adm-btn ghost sm" data-adm-resend="${attr(message.id)}">${icon('refresh')}<span>Reintentar envío</span></button></div></div>`
@@ -983,7 +986,7 @@ function renderMessageDetail(message) {
     <section class="adm-detail-status"><h3>Estado de seguimiento</h3><div class="adm-segmented wrap" role="group" aria-label="Cambiar estado">${flow.map(status => `<button type="button" class="${(message.status || 'pendiente') === status ? 'active' : ''}" data-adm-status="${attr(status)}" data-id="${attr(message.id)}" aria-pressed="${(message.status || 'pendiente') === status}">${esc(status[0].toUpperCase() + status.slice(1))}</button>`).join('')}</div></section>
     <section class="adm-detail-note"><h3>Nota interna</h3><form data-adm-note-form="${attr(message.id)}"><textarea name="note" rows="3" maxlength="1000" placeholder="Visible solo para la administración">${esc(message.adminNote || '')}</textarea><div class="adm-note-actions"><button type="submit" class="adm-btn ghost sm">${icon('check')}<span>Guardar nota</span></button></div></form></section>
     <section class="adm-detail-history"><h3>Historial</h3><ol class="adm-timeline">${history.slice().reverse().map(entry => `<li><span class="adm-timeline-dot ${STATUS_TONE[entry.status] || ''}"></span><div><strong>${esc(entry.status)}</strong><small>${esc(entry.actor || '')} · ${esc(ADM.relativeTime(entry.date))}</small></div></li>`).join('')}</ol></section>
-    <footer class="adm-detail-foot"><button type="button" class="adm-btn ghost sm" data-adm-read="${attr(message.id)}">${icon(message.read ? 'eyeOff' : 'eye')}<span>${message.read ? 'Marcar como no leída' : 'Marcar como leída'}</span></button><button type="button" class="adm-btn danger sm" data-adm-delete-message="${attr(message.id)}">${icon('trash')}<span>Eliminar</span></button></footer>
+    <footer class="adm-detail-foot"><button type="button" class="adm-btn ghost sm" data-adm-read="${attr(message.id)}">${icon(message.read ? 'eyeOff' : 'eye')}<span>${message.read ? 'Marcar como no leída' : 'Marcar como leída'}</span></button><button type="button" class="adm-btn danger sm" data-adm-delete-message="${attr(message.id)}">${icon(window.AdeCloudAdmin?.available?'inbox':'trash')}<span>${window.AdeCloudAdmin?.available?'Archivar':'Eliminar'}</span></button></footer>
   </article>`;
 }
 
@@ -1147,7 +1150,7 @@ function renderAdmSections() {
   const draft = admState.sectionsDraft;
   const editable = SECTIONS.filter(section => section !== 'inicio');
   const active = editable.filter(section => draft.enabled[section]).length;
-  return `${pageHead({ kicker: 'Sitio público', title: 'Secciones', text: 'Activa o desactiva secciones y ajusta su encabezado. Inicio e Información son esenciales y permanecen visibles; el acceso administrativo siempre está disponible en la barra superior y en el pie.', actions: `<button class="adm-btn ghost" type="button" data-adm-sections-reset ${admState.sectionsDirty ? '' : 'disabled'}>Descartar</button><button class="adm-btn primary" type="button" data-adm-sections-publish ${admState.sectionsDirty ? '' : 'disabled'}>${icon('check')}<span>Publicar cambios</span></button>` })}
+  return `${pageHead({ kicker: 'Sitio público', title: 'Secciones', text: 'Activa o desactiva secciones y ajusta su encabezado. Inicio e Información son esenciales y permanecen visibles; el acceso administrativo permanece en el pie de página.', actions: `<button class="adm-btn ghost" type="button" data-adm-sections-reset ${admState.sectionsDirty ? '' : 'disabled'}>Descartar</button><button class="adm-btn primary" type="button" data-adm-sections-publish ${admState.sectionsDirty ? '' : 'disabled'}>${icon('check')}<span>Publicar cambios</span></button>` })}
     <p class="adm-result-count">${active} de ${editable.length} secciones activas</p>
     <div class="adm-section-list">${SECTIONS.map(section => {
       const locked = ['inicio', 'informacion'].includes(section);
@@ -1288,6 +1291,12 @@ async function admDriveSync(button) {
 function renderAdmConfig() {
   const settings = appData.settings;
   const state = adminServerState || {};
+  if(window.AdeCloudAdmin?.available)return `${pageHead({kicker:'Sistema',title:'Integraciones',text:'Administración conectada a Firebase. Los archivos se enlazan desde Google Drive.'})}
+    <form class="adm-card" id="admConfigForm" novalidate><header class="adm-card-head"><h2>Repositorio de Google Drive</h2></header><div class="adm-form">
+      <div class="adm-field full"><label for="adm-c-folder">Carpeta pública de Drive</label><input id="adm-c-folder" name="driveFolderUrl" type="url" value="${attr(settings.driveFolderUrl||'')}" data-adm-config><small class="adm-error" data-error-for="driveFolderUrl"></small></div>
+      <div class="adm-field full"><label for="adm-c-script">Lector público de Apps Script (/exec)</label><input id="adm-c-script" name="driveRepositoryApiUrl" type="url" value="${attr(settings.driveRepositoryApiUrl||'')}" data-adm-config><small class="adm-help">Este enlace permite consultar archivos públicos de la carpeta. No pegues contraseñas ni claves privadas.</small><small class="adm-error" data-error-for="driveRepositoryApiUrl"></small></div>
+      </div><footer class="adm-card-foot"><button type="submit" class="adm-btn primary">Guardar configuración</button></footer></form>
+      <section class="adm-card"><header class="adm-card-head"><h2>Consultas y correo</h2></header><p>Las solicitudes llegan a la bandeja privada de Firebase. La copia automática al Gmail de la ASO requiere conectar Apps Script por separado.</p></section>`;
   return `${pageHead({ kicker: 'Sistema', title: 'Integraciones', text: 'Conexión con Google Drive y con el servicio de correo de la ASO. Las credenciales nunca se guardan en el navegador.' })}
     <form class="adm-card" id="admConfigForm" novalidate><header class="adm-card-head"><div><h2>Repositorio en Google Drive</h2><p>El ID de la carpeta se deriva automáticamente del enlace</p></div></header>
       <div class="adm-form">
@@ -1333,12 +1342,18 @@ function renderAdmBackup() {
         <footer class="adm-card-foot"><label class="adm-btn secondary adm-upload">${icon('upload')}<span>Elegir archivo JSON</span><input type="file" accept="application/json,.json" data-adm-import hidden></label></footer>
       </section>
     </div>
-    <section class="adm-card"><header class="adm-card-head"><div><h2>Copia del servidor</h2><p>Para un respaldo a nivel de archivos</p></div></header><p class="adm-muted">Detén el servidor y copia la carpeta <span class="adm-mono">.private</span> completa (base SQLite, archivos auxiliares e imágenes subidas).</p></section>`;
+    ${window.AdeCloudAdmin?.available ? '<p class="adm-muted">Las cuentas y los datos personales de estudiantes permanecen separados del respaldo institucional.</p>' : `<section class="adm-card"><header class="adm-card-head"><div><h2>Copia del servidor</h2><p>Para un respaldo a nivel de archivos</p></div></header><p class="adm-muted">Detén el servidor y copia la carpeta <span class="adm-mono">.private</span> completa (base SQLite, archivos auxiliares e imágenes subidas).</p></section>`}`;
 }
 
 async function admDownloadBackup(button) {
   button.disabled = true; button.classList.add('is-loading');
   try {
+    if(window.AdeCloudAdmin?.available){
+      const result=await portalApi('/api/backup');
+      admDownload(new Blob([JSON.stringify(result,null,2)],{type:'application/json'}),`aso-ade-respaldo-${new Date().toISOString().slice(0,10)}.json`);
+      adminServerState.lastBackup={at:result.exportedAt,actor:window.AdeCloudAdmin.ownerEmail};
+      showToast('Respaldo descargado','Guárdalo en un lugar privado.','success');renderAdminContent({keepScroll:true});return;
+    }
     const response = await fetch('/api/backup', { credentials: 'same-origin', cache: 'no-store' });
     if (!response.ok) { let message = 'No se pudo generar el respaldo.'; try { message = (await response.json()).error || message; } catch {} throw new Error(message); }
     admDownload(await response.blob(), `aso-ade-respaldo-${new Date().toISOString().slice(0, 10)}.json`);
@@ -1458,7 +1473,7 @@ async function handleAdminClick(event) {
   if (closest('[data-adm-inbox-reset]')) { admState.inbox = { type: 'all', status: 'all', subject: 'all', from: '', to: '', query: '', selected: '' }; return renderAdminContent(); }
   if ((node = closest('[data-adm-status]'))) return admSetStatus(node.dataset.id, node.dataset.admStatus);
   if ((node = closest('[data-adm-read]'))) { const message = appData.messages.find(item => item.id === node.dataset.admRead); return message && admUpdateMessage({ id: message.id, status: message.status || 'pendiente', read: !message.read }, message.read ? 'Marcada como no leída' : 'Marcada como leída'); }
-  if ((node = closest('[data-adm-delete-message]'))) { const message = appData.messages.find(item => item.id === node.dataset.admDeleteMessage); if (message && await confirmAction({ title: 'Eliminar solicitud', message: `La solicitud de ${message.name || 'esta persona'} se eliminará definitivamente del servidor.`, confirmText: 'Eliminar' })) { admState.inbox.selected = ''; await admUpdateMessage({ id: message.id, remove: true }, 'Solicitud eliminada'); } return; }
+  if ((node = closest('[data-adm-delete-message]'))) { const message = appData.messages.find(item => item.id === node.dataset.admDeleteMessage); const cloud=window.AdeCloudAdmin?.available; if (message && await confirmAction({ title: cloud?'Archivar solicitud':'Eliminar solicitud', message: cloud?'La solicitud quedará archivada en Firebase y podrás consultarla en Archivadas.':`La solicitud de ${message.name || 'esta persona'} se eliminará definitivamente del servidor.`, confirmText: cloud?'Archivar':'Eliminar' })) { admState.inbox.selected = ''; await admUpdateMessage({ id: message.id, remove: true }, cloud?'Solicitud archivada':'Solicitud eliminada'); } return; }
   if ((node = closest('[data-adm-resend]'))) return admResend(node);
   if (closest('[data-adm-export]')) return admExportCsv();
   if ((node = closest('[data-adm-copy]'))) { try { await navigator.clipboard.writeText(node.dataset.admCopy); showToast('Copiado', node.dataset.admCopy, 'success'); } catch { showToast('No se pudo copiar', 'Copia el dato manualmente.', 'error'); } return; }
@@ -1586,4 +1601,18 @@ document.addEventListener('keydown', event => {
 document.addEventListener('click', event => {
   if (event.target.closest('[data-preview-exit]')) exitHomePreview();
   else if (event.target.closest('[data-preview-publish]')) publishHomeDraft().then(ok => { if (ok) exitHomePreview({ reopen: false }); });
+});
+
+// Verification uses the password entered by the account owner, never a stored secret.
+document.addEventListener('click',async event=>{
+  const button=event.target.closest?.('#adminVerifyEmailButton');
+  if(!button||!window.AdeCloudAdmin?.available)return;
+  const form=document.getElementById('adminLoginForm');if(!form.reportValidity())return;
+  button.disabled=true;
+  try{
+    await window.AdeCloudAdmin.request('/api/admin/verify',{email:document.getElementById('adminEmailInput').value,password:document.getElementById('adminPasswordInput').value});
+    document.getElementById('adminPasswordInput').value='';
+    showToast('Verifica el correo ASO','Abre el enlace enviado a Gmail y luego vuelve a entrar al panel.','success');
+  }catch(error){showToast('No se pudo enviar la verificación',error.message,'error');}
+  finally{button.disabled=false;}
 });

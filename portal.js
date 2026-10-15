@@ -5574,13 +5574,18 @@ document.addEventListener('focusout', () => setTimeout(() => {
     }
 
     function openAdminLogin() {
- if (window.AdeRuntime?.staticMode) {
+ if (window.AdeRuntime?.staticMode && !window.AdeCloudAdmin?.available) {
    if (window.AdeRuntime.apiBase) window.open(window.AdeRuntime.apiBase, '_blank', 'noopener');
    else showToast('Administración no disponible', 'Esta publicación aún no está conectada con la administración.', 'info');
    return;
  }
  if (isAdmin) return openAdminPanel();
  el.adminEmailInput.value = ''; el.adminPasswordInput.value = '';
+ if(window.AdeCloudAdmin?.available){
+   el.adminEmailInput.value=window.AdeCloudAdmin.ownerEmail;
+   document.querySelector('#adminLoginForm .admin-security-note').textContent='Acceso exclusivo de la ASO mediante Firebase. Debes verificar el correo antes de entrar. La sesión se cierra tras 30 minutos de inactividad.';
+ }
+ const cloudActions=document.getElementById('adminCloudActions');if(cloudActions)cloudActions.hidden=!window.AdeCloudAdmin?.available;
  el.adminLoginModal.hidden = false;
  setTimeout(()=>el.adminEmailInput.focus(),50);
 }
@@ -5629,7 +5634,7 @@ document.addEventListener('focusout', () => setTimeout(() => {
       el.adminOpenButton.setAttribute("aria-label", isAdmin ? "Abrir panel administrador activo" : "Abrir panel administrador");
     }
     async function validateAdminSessionOnLoad() {
- if (typeof window !== 'undefined' && window.AdeRuntime?.staticMode) return;
+ if (typeof window !== 'undefined' && window.AdeRuntime?.staticMode && !window.AdeCloudAdmin?.available) return;
  let restoredToken='';
  try { const session=await portalApi('/api/session'); if(adminSessionToken) return; isAdmin=true; restoredToken=session.token; adminSessionToken=restoredToken; await Promise.all([loadCriticalCollectionsFromSheets(),loadAdminInbox()]); touchAdminSession(); }
  catch { if(adminSessionToken===restoredToken) {isAdmin=false;adminSessionToken='';} }
@@ -6530,7 +6535,7 @@ document.addEventListener('focusout', () => setTimeout(() => {
         } finally {
           sharedDataRefreshInFlight = false;
         }
-      }, 60000);
+      }, window.AdeCloudAdmin?.available ? 300000 : 60000);
     }
 
     async function syncCriticalCollectionsToSheets() {
@@ -6712,6 +6717,7 @@ document.addEventListener('focusout', () => setTimeout(() => {
 let publicContentResponse = null;
 async function portalApi(url, data) {
  if(location.protocol === 'file:') throw Error('Abre http://127.0.0.1:4173 para usar el panel. El archivo HTML por sí solo no conecta con el servidor.');
+ if(typeof window!=='undefined' && window.AdeCloudAdmin?.available && ['/api/content','/api/login','/api/logout','/api/session','/api/admin','/api/message','/api/messages','/api/backup','/api/upload'].includes(url.split('?')[0])) return window.AdeCloudAdmin.request(url,data);
  const publicRequest = url === '/api/content' && data === undefined;
  const runtime = typeof window !== 'undefined' ? window.AdeRuntime : null;
  const endpoint = runtime?.staticMode && !runtime.backendAvailable && publicRequest
