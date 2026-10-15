@@ -25,8 +25,10 @@
   }
   async function headers(selected=session) {
     if(!selected)throw fail('Inicia sesión con la cuenta ASO.',401);
+    if(selected.expires<=Date.now()){session=null;sessionStorage.removeItem(sessionKey);throw fail('La sesión caducó. Vuelve a entrar.',401);}
     const token=await firebase.authorize(selected);
-    if(selected===session)sessionStorage.setItem(sessionKey,JSON.stringify(selected));
+    if(selected!==session)throw fail('La sesión cambió. Vuelve a entrar.',401);
+    selected.expires=Date.now()+1800000;sessionStorage.setItem(sessionKey,JSON.stringify(selected));
     return {'Content-Type':'application/json',Authorization:'Bearer '+token};
   }
   async function doc(name,admin=false) {
@@ -137,9 +139,9 @@
     }
     const identity=await firebase.request('identity',{},selected);
     if(!identity?.emailVerified)throw fail('Primero verifica el correo ASO. Pulsa «Enviar verificación», abre el enlace en Gmail y vuelve a entrar.',403);
-    const old=session;session=selected;
+    const old=session;selected.expires=Date.now()+1800000;session=selected;
     try{await doc('portal/private',true);sessionStorage.setItem(sessionKey,JSON.stringify(session));}
-    catch(error){session=old;throw error;}
+    catch(error){session=old;if(old)sessionStorage.setItem(sessionKey,JSON.stringify(old));else sessionStorage.removeItem(sessionKey);throw error;}
     return {ok:true,token:'firebase-admin',email:session.user.email};
   }
   async function request(path,data){
