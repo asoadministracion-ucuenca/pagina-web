@@ -1,0 +1,19 @@
+{
+  "name": "ASO Administración de Empresas 2026–2027",
+  "short_name": "ADE UCuenca",
+  "description": "Portal de estudiantes y representantes de Administración de Empresas de la Universidad de Cuenca.",
+  "lang": "es-EC",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f7fa",
+  "theme_color": "#324cd4",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

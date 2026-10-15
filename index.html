@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://script.google.com https://script.googleusercontent.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https:; frame-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <script src="local-entry.js?v=1"></script>
+  <title>ASO Administración de Empresas 2026–2027 | Universidad de Cuenca</title>
+  <meta name="description" content="Portal de la ASO 2026–2027 de Administración de Empresas de la Universidad de Cuenca: malla, representantes, recursos, herramientas y oportunidades académicas.">
+  <meta name="theme-color" content="#324cd4">
+  <meta property="og:title" content="ASO Administración de Empresas 2026–2027 | Universidad de Cuenca">
+  <meta property="og:description" content="Información académica y representación estudiantil de Administración de Empresas en la Universidad de Cuenca.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_EC">
+  <meta property="og:site_name" content="ASO Administración de Empresas 2026–2027">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css?v=pro-3">
+<link rel="stylesheet" href="design.css?v=mobile-4">
+<link rel="stylesheet" href="home.css?v=pro-5">
+<link rel="stylesheet" href="admin.css?v=adm-1">
+<link rel="stylesheet" href="student-account.css?v=2"></head>
+<body><a class="skip-link" href="#mainContent">Saltar al contenido</a>
+  <div class="admin-mode-bar" id="adminModeBar" hidden>
+    <span>🔐 Modo Administrador activo</span>
+    <button id="adminLogoutButton" type="button">Cerrar sesión</button>
+  </div>
+  <div class="alert-banner" id="alertBanner" hidden></div>
+  <nav class="site-nav">
+    <div class="nav-inner">
+      <a aria-label="ASO ADE · Inicio" class="nav-logo" href="#inicio" data-tab="inicio"><img class="nav-brand-image" src="assets/logo-aso-ade-192.png" width="48" height="48" decoding="async" alt=""><span class="wordmark">ASO ADE<small>UNIVERSIDAD DE CUENCA</small></span></a>
+      <div class="nav-links" id="navLinks">
+        <a href="#inicio" data-tab="inicio">Inicio</a>
+        <a href="#carrera" data-tab="carrera">Carrera</a>
+        <a href="#informacion" data-tab="informacion">Información</a>
+        <div class="nav-group" data-nav-group="">
+          <button class="nav-menu-toggle" type="button" data-nav-accordion="" data-tab="herramientas" data-service-focus="toolsWorkspace" aria-haspopup="true" aria-expanded="false">Herramientas <span aria-hidden="true">▼</span></button>
+          <div class="nav-dropdown tools-dropdown">
+            <span class="dropdown-section-title">Herramientas académicas</span>
+            <a class="tool-menu-item" href="#herramientas" data-tab="herramientas" data-service-focus="toolCalculadora"><span class="tool-menu-icon">🧮</span><span><strong>Promedio</strong><small>Nota final</small></span></a>
+            <a class="tool-menu-item" href="#herramientas" data-tab="herramientas" data-service-focus="toolHorario"><span class="tool-menu-icon">🗓️</span><span><strong>Horario</strong><small>Plan semanal</small></span></a>
+            <a class="tool-menu-item" href="#herramientas" data-tab="herramientas" data-service-focus="toolMalla"><span class="tool-menu-icon">📚</span><span><strong>Malla</strong><small>Progreso</small></span></a>
+            <a class="tool-menu-item" href="#herramientas" data-tab="herramientas" data-service-focus="toolPomodoro"><span class="tool-menu-icon">⏱️</span><span><strong>Pomodoro</strong><small>Estudio</small></span></a>
+            <a class="tool-menu-item" href="#herramientas" data-tab="herramientas" data-service-focus="toolFormulas"><span class="tool-menu-icon">∑</span><span><strong>Fórmulas</strong><small>Banco</small></span></a>
+            <a class="tool-menu-item" href="#herramientas" data-tab="herramientas" data-service-focus="toolDataSources"><span class="tool-menu-icon">▦</span><span><strong>Fuentes para empresas</strong><small>Empresas y mercados</small></span></a>
+            <a class="tool-menu-item" href="#herramientas" data-tab="herramientas" data-service-focus="toolIA"><span class="tool-menu-icon">🤖</span><span><strong>IA académica</strong><small>Consulta</small></span></a>
+            <a class="tool-menu-item" href="#herramientas" data-tab="herramientas" data-service-focus="toolPlan"><span class="tool-menu-icon">🧭</span><span><strong>Plan</strong><small>Repaso</small></span></a>
+            <a class="tool-menu-item" href="#herramientas" data-tab="herramientas" data-service-focus="toolSimulador"><span class="tool-menu-icon">📝</span><span><strong>Simulador</strong><small>Práctica</small></span></a>
+          </div>
+        </div>
+        <div class="nav-group" data-nav-group="">
+          <button class="nav-menu-toggle" type="button" data-nav-accordion="" aria-haspopup="true" aria-expanded="false">Aprender <span aria-hidden="true">▼</span></button>
+          <div class="nav-dropdown">
+            <button class="nav-app-link" type="button" data-app="glossary">Glosario de Administración</button>
+
+            <button class="nav-app-link" type="button" data-app="timeline">Historia de la Gestión Empresarial</button>
+            <button class="nav-app-link" type="button" data-app="apa">Bibliografía APA</button>
+          </div>
+        </div>
+        <div class="nav-group" data-nav-group="">
+          <button class="nav-menu-toggle" type="button" data-nav-accordion="" aria-haspopup="true" aria-expanded="false">Académico <span aria-hidden="true">▼</span></button>
+          <div class="nav-dropdown academic-dropdown">
+            <a href="#repositorio" data-tab="repositorio">Repositorio</a>
+            <a href="#silabos" data-tab="silabos">Sílabos</a>
+            <span class="dropdown-section-title">Links de páginas web de la U</span>
+            <a class="external-nav-link" href="https://enova-grado.ucuenca.edu.ec/" target="_blank" rel="noopener noreferrer">eNova Grado UCuenca</a>
+            <a class="external-nav-link" href="https://nova.ucuenca.edu.ec" target="_blank" rel="noopener noreferrer">Nova UCuenca</a>
+            <a class="external-nav-link" href="https://ed.ucuenca.edu.ec/" target="_blank" rel="noopener noreferrer">ED</a>
+            <button class="nav-app-link" type="button" data-open-drive-repo="">Drive / repositorio simplificado</button>
+            <a href="#banco" data-tab="banco">Exámenes <span class="nav-badge" id="examNavBadge">0</span></a>
+            <a href="#introductorio" data-tab="introductorio">Introductorio</a>
+            <a href="#tutorias" data-tab="tutorias">Tutorías</a>
+          </div>
+        </div>
+        <div class="nav-group" data-nav-group="">
+          <button class="nav-menu-toggle" type="button" data-nav-accordion="" aria-haspopup="true" aria-expanded="false">Gestión <span aria-hidden="true">▼</span></button>
+          <div class="nav-dropdown">
+            <a href="#consultas" data-tab="consultas">Consultas</a>
+
+            <a href="#merch" data-tab="merch">Merch</a>
+          </div>
+        </div>
+        <div class="nav-group" data-nav-group="">
+          <button class="nav-menu-toggle" type="button" data-nav-accordion="" aria-haspopup="true" aria-expanded="false">Comunidad <span aria-hidden="true">▼</span></button>
+          <div class="nav-dropdown">
+
+
+
+            <button class="nav-app-link" type="button" data-app="tasks">Rastreador de Tareas</button>
+            <a href="#docentes" data-tab="docentes">Docentes</a>
+
+            <a href="#oportunidades" data-tab="oportunidades">Oportunidades</a>
+            <a href="#representantes" data-tab="representantes">Representantes</a>
+          </div>
+        </div>
+        <button class="mobile-menu-control mobile-dark-toggle" id="mobileDarkModeToggle" type="button">Modo oscuro</button>
+      </div>
+      <button class="nav-icon-button" id="globalSearchButton" type="button" aria-label="Buscar en el portal"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg></button>
+      <button class="nav-icon-button" id="profileOpenButton" type="button" aria-label="Abrir perfil del estudiante"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg></button>
+      <button class="services-trigger" id="servicesOpenButton" type="button">Servicios</button>
+      <button class="services-trigger" id="darkModeToggle" type="button">Modo oscuro</button>
+      <button class="hamburger" id="hamburgerButton" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="services-backdrop" id="servicesBackdrop" hidden></div>
+  <div class="services-backdrop" id="profileBackdrop" hidden></div>
+  <aside class="services-panel" id="servicesPanel" role="dialog" aria-modal="true" aria-label="Servicios estudiantiles" hidden>
+    <div class="services-panel-header">
+      <div>
+        <span class="section-tag">Accesos rápidos</span>
+        <h2>Servicios</h2>
+      </div>
+      <button class="services-close" id="servicesCloseButton" type="button" aria-label="Cerrar servicios">X</button>
+    </div>
+    <nav class="services-list">
+      <a href="#recursos" data-tab="recursos">Actividad Física</a>
+
+
+      <a href="#repositorio" data-tab="repositorio" data-service-focus="physicalBooksContainer">Biblioteca Física</a>
+      <a href="#inicio" data-tab="inicio" data-service-focus="kitNuevoIngreso">Kit de Nuevo Ingreso</a>
+      <a href="#consultas" data-tab="consultas">Bienestar Estudiantil</a>
+      <a href="#oportunidades" data-tab="oportunidades">Prácticas y Pasantías</a>
+      <a href="#oportunidades" data-tab="oportunidades">Becas y Convocatorias</a>
+      <a href="#repositorio" data-tab="repositorio">Software Académico</a>
+      <a href="#herramientas" data-tab="herramientas">Calculadora y Malla</a>
+      <a href="#introductorio" data-tab="introductorio">Clases Introductorias</a>
+
+      <a href="#docentes" data-tab="docentes">Atención Docente</a>
+      <a href="#tutorias" data-tab="tutorias">Tutorías</a>
+    </nav>
+  </aside>
+
+  <aside class="services-panel" id="profilePanel" role="dialog" aria-modal="true" aria-label="Perfil del estudiante" hidden>
+    <div class="services-panel-header">
+      <div>
+        <span class="section-tag">Perfil</span>
+        <h2>Perfil del estudiante</h2>
+      </div>
+      <button class="services-close" id="profileCloseButton" type="button" aria-label="Cerrar perfil">X</button>
+    </div>
+    <div class="student-profile-body">
+    <section class="student-account" id="studentAccount" aria-label="Cuenta de estudiante">
+      <h3 data-student-identity>Tu cuenta de estudiante</h3>
+      <p data-student-status role="status" aria-live="polite">Guardado en este dispositivo.</p>
+      <p data-student-unavailable hidden>La conexión con las cuentas aún no está activada. Puedes seguir usando tu perfil local y descargar un respaldo.</p>
+      <form>
+        <label>Correo de tu cuenta<input name="email" type="email" autocomplete="username" required maxlength="200" placeholder="tu.correo@ucuenca.edu.ec"></label>
+        <label>Contraseña<input name="password" type="password" autocomplete="current-password" required minlength="12" maxlength="128" placeholder="Al menos 12 caracteres"></label>
+        <label>Repite la contraseña para crear una cuenta<input name="confirm" type="password" autocomplete="new-password" maxlength="128"></label>
+        <div class="student-account-actions"><button class="btn-primary" type="submit" name="mode" value="login" data-student-login>Iniciar sesión</button><button class="btn-secondary" type="submit" name="mode" value="register" data-student-register>Crear cuenta</button></div>
+        <button class="btn-secondary" type="button" data-student-reset hidden>Olvidé mi contraseña</button>
+      </form>
+      <div data-student-signed hidden>
+        <div class="student-account-actions"><button class="btn-secondary" type="button" data-student-sync>Sincronizar ahora</button><button class="btn-secondary" type="button" data-student-logout>Cerrar mi sesión</button></div>
+        <button class="btn-secondary" type="button" data-student-copy>Copiar mis datos del modo local</button>
+      </div>
+      <div class="student-account-conflict" data-student-conflict hidden><p>Hay cambios distintos en dos dispositivos. Descarga un respaldo antes de elegir si deseas conservar ambas versiones.</p><div class="student-account-actions"><button type="button" class="btn-secondary" data-student-resolve="cloud">Usar versión de la nube</button><button type="button" class="btn-secondary" data-student-resolve="local">Conservar mis cambios locales</button></div></div>
+      <details><summary>Respaldo de mis datos</summary><div class="student-account-actions"><button class="btn-secondary" type="button" data-student-export>Descargar mi respaldo</button></div><label>Restaurar un respaldo<input type="file" accept=".json,application/json" data-student-import></label></details>
+      <p data-student-message role="status" aria-live="polite"></p>
+      <p class="student-account-note">Perfil, avance de malla, horario, notas y favoritos pertenecen a tu cuenta. Sin sesión se guardan solo en este navegador. El registro no verifica que el correo sea de la universidad.</p>
+    </section>
+    <form class="portal-form" id="profileForm">
+      <div class="portal-form-grid">
+        <label class="full"><span>Nombre completo</span><input id="profileName" name="name" type="text" placeholder="Tu nombre"></label>
+        <label class="full"><span>Correo institucional</span><input id="profileEmail" name="email" type="email" placeholder="usuario@ucuenca.edu.ec"></label>
+        <label class="full"><span>Ciclo actual</span><select id="profileCycle" name="cycle"></select></label>
+      </div>
+      <div class="modal-actions"><button class="btn-primary" type="submit">Guardar perfil</button></div>
+      <div class="student-profile-summary" id="profileSummary"></div>
+    </form>
+    </div>
+  </aside>
+
+  <main tabindex="-1" id="mainContent">
+    <section class="page-section hero-section active" id="inicio" data-section="inicio">
+      <div class="hero-wrap">
+        <div class="hero-intro">
+          <div class="portal-logo brand-poster" aria-label="Logo ASO Administración de Empresas, periodo 2026 a 2027">
+            <img src="assets/logo-aso-ade-384.png" width="384" height="384" decoding="async" alt="ASO Administración de Empresas">
+            <span class="logo-edition" aria-hidden="true">2026–2027</span>
+          </div>
+          <div class="institutional-line">Asociación de estudiantes · ASO 2026–2027</div>
+          <span class="eyebrow">Carrera oficial</span>
+          <h1>Administración de Empresas — Universidad de Cuenca</h1>
+          <p class="hero-copy" id="welcomeText"></p>
+          <p id="heroTitle" hidden></p>
+          <div class="hero-actions">
+            <a class="btn-primary" href="#repositorio" data-tab="repositorio">Abrir repositorio</a>
+            <a class="btn-ghost" href="#consultas" data-tab="consultas">Enviar consulta</a>
+          </div>
+          <div class="hero-quick-chips" aria-label="Accesos rápidos del inicio">
+            <button type="button" data-tab="repositorio">Repositorio</button>
+            <button type="button" data-tab="herramientas">Herramientas</button>
+            <button type="button" data-tab="consultas">Consultas</button>
+          </div>
+          <article class="semester-widget" id="semesterWidget" aria-label="Mi semestre académico"></article>
+          <div class="academic-curve-card" aria-label="Gráfica de progreso académico">
+            <svg class="academic-curve" viewBox="0 0 640 180" role="img" aria-labelledby="curveTitle">
+              <title id="curveTitle">Progreso académico por ciclo</title>
+              <g class="curve-grid" stroke="rgba(0,48,135,0.08)" stroke-width="1">
+                <path d="M42 32H604M42 72H604M42 112H604M42 152H604"/>
+              </g>
+              <g class="curve-bars" fill="var(--azul-acento)" opacity=".16">
+                <rect class="curve-bar" style="--i: 0" x="62" y="116" width="34" height="36" rx="6"/>
+                <rect class="curve-bar" style="--i: 1" x="132" y="104" width="34" height="48" rx="6"/>
+                <rect class="curve-bar" style="--i: 2" x="202" y="88" width="34" height="64" rx="6"/>
+                <rect class="curve-bar" style="--i: 3" x="272" y="74" width="34" height="78" rx="6"/>
+                <rect class="curve-bar" style="--i: 4" x="342" y="66" width="34" height="86" rx="6"/>
+                <rect class="curve-bar" style="--i: 5" x="412" y="54" width="34" height="98" rx="6"/>
+                <rect class="curve-bar" style="--i: 6" x="482" y="43" width="34" height="109" rx="6"/>
+                <rect class="curve-bar" style="--i: 7" x="552" y="34" width="34" height="118" rx="6"/>
+              </g>
+              <path class="growth-line" pathLength="1" d="M78 132 C132 118, 158 119, 202 104 S277 84, 322 88 S397 74, 442 58 S523 48, 568 28" fill="none" stroke="var(--navy)" stroke-width="5" stroke-linecap="round"/>
+              <g class="curve-points">
+                <circle class="curve-point" style="--i: 0" cx="78" cy="132" r="6"/>
+                <circle class="curve-point" style="--i: 1" cx="148" cy="116" r="6"/>
+                <circle class="curve-point" style="--i: 2" cx="218" cy="100" r="6"/>
+                <circle class="curve-point" style="--i: 3" cx="288" cy="88" r="6"/>
+                <circle class="curve-point" style="--i: 4" cx="358" cy="82" r="6"/>
+                <circle class="curve-point" style="--i: 5" cx="428" cy="61" r="6"/>
+                <circle class="curve-point" style="--i: 6" cx="498" cy="48" r="6"/>
+                <circle class="curve-point top-point" style="--i: 7" cx="568" cy="28" r="7"/>
+              </g>
+              <g class="curve-tooltip">
+                <path d="M462 22H548C558 22 566 30 566 40V54C566 64 558 72 548 72H494L476 88L481 72H462C452 72 444 64 444 54V40C444 30 452 22 462 22Z"/>
+                <text x="462" y="47">Progreso académico</text>
+              </g>
+              <g class="curve-axis" fill="currentColor">
+                <text x="70" y="172">C1</text><text x="140" y="172">C2</text><text x="210" y="172">C3</text><text x="280" y="172">C4</text>
+                <text x="350" y="172">C5</text><text x="420" y="172">C6</text><text x="490" y="172">C7</text><text x="560" y="172">C8</text>
+              </g>
+            </svg>
+          </div>
+          <div class="mission-grid">
+            <article class="mission-card">
+              <h3>Misión institucional · UCuenca</h3>
+              <p id="missionText"></p>
+            </article>
+            <article class="mission-card">
+              <h3>Visión institucional al 2027</h3>
+              <p id="visionText"></p>
+            </article>
+          </div>
+          <blockquote class="hero-quote" id="heroQuote">
+            <p>Gestión responsable, decisiones informadas y organizaciones sostenibles.</p>
+            <cite>Principios para la Administración de Empresas</cite>
+          </blockquote>
+          <div class="hero-institutional-facts" aria-label="Datos institucionales">
+            <article>
+              <span>Año de fundación</span>
+              <strong>1867</strong>
+            </article>
+            <article>
+              <span>Modalidad</span>
+              <strong>Presencial</strong>
+            </article>
+            <article>
+              <span>Duración</span>
+              <strong>4 años — 8 ciclos</strong>
+            </article>
+            <article>
+              <span>Título</span>
+              <strong>Licenciado/a en Administración de Empresas</strong>
+            </article>
+          </div>
+          <hr class="hero-intro-separator">
+          <div class="hero-skills-block">
+            <h3>Competencias que desarrollarás</h3>
+            <div class="hero-skills-grid">
+              <div>Gestión estratégica</div>
+              <div>Finanzas empresariales</div>
+              <div>Talento humano</div>
+              <div>Marketing y ventas</div>
+              <div>Producción y logística</div>
+              <div>Emprendimiento e innovación</div>
+            </div>
+          </div>
+          <div class="hero-steps-block">
+            <h3>Primeros pasos en el portal</h3>
+            <ol class="hero-steps-list">
+              <li><span class="step-num">01</span><span>Explora el Repositorio Académico por ciclo y materia.</span></li>
+              <li><span class="step-num">02</span><span>Usa la Calculadora de Promedio en Herramientas.</span></li>
+              <li><span class="step-num">03</span><span>Inscríbete a una Tutoría si necesitas refuerzo.</span></li>
+              <li><span class="step-num">04</span><span>Revisa Oportunidades vigentes.</span></li>
+            </ol>
+          </div>
+        </div>
+        <aside class="hero-panel">
+          <div class="metric-grid">
+            <div class="metric-card"><strong>8</strong><span>Ciclos académicos</span></div>
+            <div class="metric-card"><strong id="subjectCounter">0</strong><span>Materias organizadas</span></div>
+            <div class="metric-card"><strong id="heroMaterialCounter">0</strong><span>Materiales visibles</span></div>
+            <div class="metric-card"><strong id="favoriteCounter">0</strong><span>Favoritos guardados</span></div>
+          </div>
+          <div class="hero-clock-widget">
+            <div>
+              <span class="clock-label">Hora local — Cuenca, Ecuador</span>
+              <strong id="heroClockTime">--:--:--</strong>
+            </div>
+            <p id="heroClockDate">Cargando fecha...</p>
+          </div>
+          <div class="economic-widget">
+            <div class="view-heading"><div><h3>Contexto del mercado y la empresa</h3><p id="exchangeStatus">Variables de referencia para la gestión</p></div></div>
+            <div class="economic-grid" id="economicIndicators"></div>
+          </div>
+          <div class="next-class-widget" id="nextClassWidget"></div>
+          <div class="dashboard-widget-grid" aria-label="Panel personalizado del estudiante">
+            <article class="dashboard-widget continue-widget" id="continueWidget"></article>
+            <article class="dashboard-widget recommended-widget" id="recommendedWidget"></article>
+          </div>
+          <div class="economic-news-widget">
+            <div class="news-widget-header">
+              <h3><span class="live-dot" aria-hidden="true"></span>Últimas Noticias</h3>
+              <span>Empresas y gestión</span>
+            </div>
+            <div class="news-list" id="economicNewsList">
+              <div class="empty-state"><div><strong>Cargando noticias</strong><span>Consultando noticias sobre empresas, negocios y gestión...</span></div></div>
+            </div>
+          </div>
+          <div class="quick-row" id="homeQuickLinks"></div>
+          <div class="home-most-used">
+            <div class="view-heading">
+              <div>
+                <h3>Herramientas para tu semestre</h3>
+                <p>Accesos directos para estudiar sin perder tiempo.</p>
+              </div>
+            </div>
+            <div class="most-used-grid" id="mostUsedGrid"></div>
+          </div>
+          <div class="home-dynamic recent-materials-widget">
+            <h3>Materiales recientes</h3>
+            <div class="dashboard-list" id="homeRecentMaterials"></div>
+          </div>
+          <div class="home-dynamic">
+            <h3>Últimas oportunidades</h3>
+            <div class="card-grid" id="homeOpportunities"></div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="hero-kit-wrap">
+        <article class="kit-card" id="kitNuevoIngreso">
+          <div>
+            <span class="section-tag">Nuevo ingreso</span>
+            <h2>Kit de Nuevo Ingreso</h2>
+            <p>Guía para estudiantes que empiezan la carrera: conoce la malla, organiza tus materias y usa los recursos académicos del portal.</p>
+            <div class="kit-actions">
+              <a class="btn-primary" href="https://www.ucuenca.edu.ec/carreras/administracion-de-empresas/" target="_blank" rel="noopener noreferrer">Ver malla oficial ↗</a>
+              <a class="btn-secondary" href="#herramientas" data-tab="herramientas">Abrir herramientas</a>
+            </div>
+          </div>
+          <div class="kit-video kit-guide-card">
+            <span class="section-tag">Administración de Empresas</span>
+            <strong>4 años · 8 ciclos · modalidad presencial</strong>
+            <p>Formación para liderar emprendimientos y gestionar áreas de marketing, finanzas, talento humano y otras funciones organizacionales.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="page-section" id="carrera" data-section="carrera">
+      <div class="section-wrap">
+        <div class="section-header">
+          <span class="section-tag">Conoce tu carrera</span>
+          <h2>Información de Administración de Empresas</h2>
+          <p>Formación para crear, dirigir y mejorar organizaciones en los sectores público y privado.</p>
+        </div>
+        <div class="card-grid" id="careerCardsContainer"></div>
+        <div class="career-path-panel" id="careerPathContainer"></div>
+        <div class="career-source-links" aria-label="Fuentes oficiales de la Universidad de Cuenca">
+          <a class="btn-secondary" href="https://www.ucuenca.edu.ec/carreras/administracion-de-empresas/" target="_blank" rel="noopener noreferrer">Malla curricular y perfil oficial ↗</a>
+          <a class="btn-secondary" href="https://www.ucuenca.edu.ec/quienes-somos/" target="_blank" rel="noopener noreferrer">Misión y visión de UCuenca ↗</a>
+          <a class="btn-secondary" href="https://www.ucuenca.edu.ec/wp-content/uploads/2026/04/Oferta-Academica-2026_UCUENCA.pdf" target="_blank" rel="noopener noreferrer">Oferta académica 2026 ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="page-section" id="informacion" data-section="informacion">
+      <div class="section-wrap">
+        <div class="section-header">
+          <span class="section-tag">Accesos para estudiantes</span>
+          <h2>Información</h2>
+          <p>Horarios, calendario, solicitudes, malla curricular y trámites universitarios en un solo lugar.</p>
+        </div>
+        <div class="information-directory">
+          <section class="information-group" aria-labelledby="info-periodo-title">
+            <h3 id="info-periodo-title">Periodo Sep 25 – Feb 26</h3>
+            <div class="information-links">
+              <a class="information-link" href="https://docs.google.com/spreadsheets/d/1Mm91saOE5kg2bMfNGo9c6ebUCI90tUrc/edit?gid=1734137944#gid=1734137944" target="_blank" rel="noopener noreferrer"><span>Horario de clases MAR–AGO 26</span><span class="information-link-arrow" aria-hidden="true">↗</span></a>
+              <a class="information-link" href="https://www.ucuenca.edu.ec/wp-content/uploads/2026/01/2026_01_07_calendario_acade%CC%81mico_2026-2027.pdf" target="_blank" rel="noopener noreferrer"><span>Calendario académico 2026–2027</span><span class="information-link-arrow" aria-hidden="true">↗</span></a>
+            </div>
+          </section>
+          <section class="information-group" aria-labelledby="info-tramites-title">
+            <h3 id="info-tramites-title">Trámites académicos</h3>
+            <div class="information-links">
+              <a class="information-link" href="https://docs.google.com/forms/d/e/1FAIpQLSfH4dwQwpdj57rtgos3T04ntWK0MaDGXdTqHImho_KsAxX_cA/viewform" target="_blank" rel="noopener noreferrer"><span>Recalificación</span><span class="information-link-arrow" aria-hidden="true">↗</span></a>
+              <a class="information-link" href="https://docs.google.com/forms/d/e/1FAIpQLScJoXDQg1T2XzBXzQDmqvSdDG3L_SoQsCn0q5ozwRHqskeL7w/viewform" target="_blank" rel="noopener noreferrer"><span>Justificación por enfermedad o fallecimiento de familiar</span><span class="information-link-arrow" aria-hidden="true">↗</span></a>
+              <a class="information-link" href="https://docs.google.com/forms/d/e/1FAIpQLSde_4Z4RwDQV-zrxtRy6gi53MClux909cYXnego64eVJ_c6Mg/viewform" target="_blank" rel="noopener noreferrer"><span>Justificación por otras causas</span><span class="information-link-arrow" aria-hidden="true">↗</span></a>
+              <a class="information-link" href="https://docs.google.com/forms/d/e/1FAIpQLSd2OvI8hrQVaS-H5Aa1RCuOeY2bRh-DjkFsLf4QmUbCngWPlQ/viewform" target="_blank" rel="noopener noreferrer"><span>Retiro por caso fortuito o fuerza mayor</span><span class="information-link-arrow" aria-hidden="true">↗</span></a>
+            </div>
+          </section>
+          <section class="information-group" aria-labelledby="info-whatsapp-title">
+            <h3 id="info-whatsapp-title">Grupo de WhatsApp</h3>
+            <div class="information-links">
+              <a class="information-link" href="https://chat.whatsapp.com/Hv9XElm205tFiiApg3RpLo" target="_blank" rel="noopener noreferrer"><span>Comunidad de Administración de Empresas</span><span class="information-link-arrow" aria-hidden="true">↗</span></a>
+            </div>
+          </section>
+          <section class="information-group" aria-labelledby="info-malla-title">
+            <h3 id="info-malla-title">Malla 2025</h3>
+            <div class="information-links">
+              <a class="information-link" href="https://drive.google.com/file/d/1Do_Bst2HrWLggMSf029xPVIRxlVBv9Dg/view" target="_blank" rel="noopener noreferrer"><span>Estructura curricular ajustada 2025 con prerrequisitos</span><span class="information-link-arrow" aria-hidden="true">↗</span></a>
+              <a class="information-link" href="https://drive.google.com/file/d/1w8nNKAsKGxR_jxnPCH3GSN89WwRa7I4x/view" target="_blank" rel="noopener noreferrer"><span>Plan de transición: malla actualizada 2025</span><span class="information-link-arrow" aria-hidden="true">↗</span></a>
+            </div>
+          </section>
+          <section class="information-group" aria-labelledby="info-reglamentos-title">
+            <h3 id="info-reglamentos-title">Reglamentos</h3>
+            <div class="information-links">
+              <a class="information-link" href="https://linktr.ee/conocetuucuenca?utm_source=linktree_profile_share&ltsid=6855e031-7146-4e20-8328-967e35290ab1" target="_blank" rel="noopener noreferrer"><span>Conoce tu UCuenca · Linktree institucional</span><span class="information-link-arrow" aria-hidden="true">↗</span></a>
+              <a class="information-link" href="https://drive.google.com/file/d/1fZFWziIjH-wG6YMW6tVun0zvQ95HtRWN/view" target="_blank" rel="noopener noreferrer"><span>Estatuto UCuenca</span><span class="information-link-arrow" aria-hidden="true">↗</span></a>
+              <a class="information-link" href="https://www.ucuenca.edu.ec/wp-content/uploads/2025/11/Reglamento-matricula.pdf" target="_blank" rel="noopener noreferrer"><span>Reglamento de matrícula</span><span class="information-link-arrow" aria-hidden="true">↗</span></a>
+              <a class="information-link" href="https://www2.ucuenca.edu.ec/images/CONSEJO-UNIVERSITARIO/Resoluciones/2025/marzo/res._044_reglamento_de_rgimen_acadmico-signed.pdf" target="_blank" rel="noopener noreferrer"><span>Reglamento de régimen académico</span><span class="information-link-arrow" aria-hidden="true">↗</span></a>
+            </div>
+          </section>
+          <section class="information-group" aria-labelledby="info-practicas-title">
+            <h3 id="info-practicas-title">Prácticas y servicio comunitario</h3>
+            <div class="information-links">
+              <a class="information-link" href="https://sites.google.com/ucuenca.edu.ec/fcea-universidad-de-cuenca/documentos-y-tr%C3%A1mites/vinculaci%C3%B3n-con-la-sociedad?pli=1&authuser=0" target="_blank" rel="noopener noreferrer"><span>Formatos de documentación (Prácticas Laborales y Servicio Comunitario)</span><span class="information-link-arrow" aria-hidden="true">↗</span></a>
+              <a class="information-link" href="https://drive.google.com/file/d/11x4-Ej0RnaPH7rJKjQwTzS-D3MzCb2-1/view" target="_blank" rel="noopener noreferrer"><span>Manual de prácticas laborales y servicio comunitario</span><span class="information-link-arrow" aria-hidden="true">↗</span></a>
+            </div>
+          </section>
+          <section class="information-group" aria-labelledby="info-titulacion-title">
+            <h3 id="info-titulacion-title">Titulación</h3>
+            <div class="information-links">
+              <a class="information-link" href="https://sites.google.com/ucuenca.edu.ec/fcea-universidad-de-cuenca/documentos-y-tr%C3%A1mites/titulaci%C3%B3n" target="_blank" rel="noopener noreferrer"><span>Formatos de documentación (Titulación)</span><span class="information-link-arrow" aria-hidden="true">↗</span></a>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="page-section" id="repositorio" data-section="repositorio">
+      <div class="section-wrap">
+        <div class="section-header">
+          <span class="section-tag">Material de estudio</span>
+          <h2>Repositorio Académico</h2>
+          <p>Carpetas tipo Google Drive: ciclo, materia, categorías y recursos externos o locales.</p>
+        </div>
+        <div id="physicalBooksContainer"></div>
+        <div class="repository-shell">
+          <section class="repository-toolbar" aria-label="Herramientas del repositorio">
+            <div class="navigation-strip">
+              <button class="btn-secondary" id="backButton" type="button" hidden>Volver</button>
+              <nav class="breadcrumb" id="breadcrumb" aria-label="Ruta de navegación"></nav>
+            </div>
+            <div class="tools-grid">
+              <label class="control"><span>Buscar</span><input id="searchInput" type="search" placeholder="Buscar materias o materiales"></label>
+              <label class="control"><span>Ciclo</span><select id="cycleFilter"></select></label>
+              <label class="control"><span>Tipo</span><select id="typeFilter"></select></label>
+              <label class="control"><span>Fuente</span><select id="sourceFilter"><option value="all">Todas</option><option value="drive">Google Drive</option><option value="local">Locales</option></select></label>
+              <label class="control"><span>Orden</span><select id="sortOrder"><option value="desc">Más reciente</option><option value="asc">Más antiguo</option></select></label>
+              <label class="control"><span>Vista</span><select id="repositoryViewMode"><option value="grid">Cuadrícula</option><option value="list">Lista</option></select></label>
+              <button class="btn-primary admin-only" id="addMaterialButton" type="button">Agregar material</button>
+            </div>
+            <div class="repo-quick-filters" id="repoQuickFilters" aria-label="Filtros rápidos del repositorio">
+              <button type="button" data-repo-chip="all" class="active">Todos</button>
+              <button type="button" data-repo-chip="pdf">PDF / lecturas</button>
+              <button type="button" data-repo-chip="videos">Videos</button>
+              <button type="button" data-repo-chip="examenes">Exámenes</button>
+              <button type="button" data-repo-chip="favoritos">Favoritos</button>
+              <button type="button" data-repo-chip="metodos">Finanzas empresariales</button>
+            </div>
+          </section>
+          <section class="repository-view" id="repositoryView" aria-live="polite"></section>
+        </div>
+      </div>
+    </section>
+
+    <section class="page-section" id="silabos" data-section="silabos">
+      <div class="section-wrap">
+        <div class="section-header syllabus-section-header">
+          <span class="section-tag">Académico oficial</span>
+          <h2>Malla y sílabos de Administración de Empresas</h2>
+          <p>Encuentra materias por nombre o ciclo y abre el buscador oficial de sílabos de la Universidad de Cuenca.</p>
+        </div>
+        <div class="syllabus-shell">
+          <div class="syllabus-hero">
+            <div>
+              <span class="section-tag">Fuente oficial</span>
+              <h3>Información académica oficial</h3>
+              <p>La carrera presencial otorga el título de Licenciado/a en Administración de Empresas y tiene una duración de 4 años (8 ciclos), según la oferta académica 2026 de UCuenca.</p>
+            </div>
+            <a class="btn-secondary" id="syllabusOfficialLink" href="https://silabos.ucuenca.edu.ec/buscador/" target="_blank" rel="noopener noreferrer">Abrir buscador oficial</a>
+          </div>
+          <div class="career-source-links">
+            <a class="btn-primary" href="https://www.ucuenca.edu.ec/carreras/administracion-de-empresas/" target="_blank" rel="noopener noreferrer">Ver malla curricular por ciclo ↗</a>
+            <a class="btn-secondary" href="https://silabos.ucuenca.edu.ec/buscador/" target="_blank" rel="noopener noreferrer">Consultar sílabos vigentes ↗</a>
+          </div>
+          <div class="syllabus-toolbar" aria-label="Filtros de materias y sílabos">
+            <label class="control"><span>Buscar materia</span><input id="syllabusSearch" type="search" placeholder="Buscar materia o palabra clave"></label>
+            <label class="control"><span>Ciclo</span><select id="syllabusCycleFilter"></select></label>
+          </div>
+          <div class="syllabus-status" id="syllabusStatus" aria-live="polite"></div>
+          <div class="syllabus-grid" id="syllabusGrid"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page-section" id="tutorias" data-section="tutorias">
+      <div class="section-wrap">
+        <div class="section-header"><span class="section-tag">Apoyo académico</span><h2>Tutorías Académicas</h2><p>Encuentra acompañamiento para tus materias y reserva un espacio de estudio.</p></div>
+        <div class="card-grid" id="tutoriasContainer"></div>
+      </div>
+    </section>
+
+    <section class="page-section" id="introductorio" data-section="introductorio">
+      <div class="section-wrap">
+        <div class="section-header"><span class="section-tag">Primer ciclo</span><h2>Clases Introductorias</h2><p>Mini-cursos en video para reforzar las bases de las materias principales del primer ciclo.</p></div>
+        <div class="card-grid" id="introClassesContainer"></div>
+      </div>
+    </section>
+
+    <section class="page-section" id="merch" data-section="merch">
+      <div class="section-wrap">
+        <div class="section-header"><span class="section-tag">Comunidad ASO</span><h2>Tienda de Administración de Empresas</h2><p>Las novedades de merchandising de la ASO 2026–2027 se publicarán aquí.</p></div>
+        <div class="card-grid" id="merchContainer"></div>
+      </div>
+    </section>
+
+    <section class="page-section" id="herramientas" data-section="herramientas">
+      <div class="section-wrap">
+        <div class="section-header"><span class="section-tag">Herramientas</span><h2>Herramientas Académicas</h2><p>Selecciona una herramienta y trabaja en una sola pantalla, sin elementos repetidos ni secciones amontonadas.</p></div>
+        <div class="tools-workspace" id="toolsWorkspace">
+          <div class="tools-workspace-head">
+            <div>
+              <span class="section-tag">Panel de trabajo</span>
+              <h3 id="toolsActiveTitle">Calculadora de promedio</h3>
+              <p id="toolsActiveDescription">Elige una ficha para abrir únicamente la herramienta que necesitas.</p>
+            </div>
+            <span class="tools-active-pill" id="toolsActivePill">Promedio</span>
+          </div>
+          <div class="tools-tab-list" role="tablist" aria-label="Herramientas académicas">
+            <button class="tools-tab-button active" type="button" role="tab" aria-selected="true" data-tool-tab="toolCalculadora"><span>🧮</span><strong>Promedio</strong><small>Notas y aprobación</small></button>
+            <button class="tools-tab-button" type="button" role="tab" aria-selected="false" data-tool-tab="toolHorario"><span>🗓️</span><strong>Horario</strong><small>Plan semanal</small></button>
+            <button class="tools-tab-button" type="button" role="tab" aria-selected="false" data-tool-tab="toolMalla"><span>📚</span><strong>Malla</strong><small>Progreso académico</small></button>
+            <button class="tools-tab-button" type="button" role="tab" aria-selected="false" data-tool-tab="toolPomodoro"><span>⏱️</span><strong>Pomodoro</strong><small>Estudio enfocado</small></button>
+            <button class="tools-tab-button" type="button" role="tab" aria-selected="false" data-tool-tab="toolFormulas"><span>∑</span><strong>Fórmulas</strong><small>Banco matemático</small></button>
+            <button class="tools-tab-button" type="button" role="tab" aria-selected="false" data-tool-tab="toolDataSources"><span>▦</span><strong>Fuentes de datos</strong><small>Indicadores oficiales</small></button>
+            <button class="tools-tab-button" type="button" role="tab" aria-selected="false" data-tool-tab="toolIA"><span>🤖</span><strong>IA académica</strong><small>Consulta el portal</small></button>
+            <button class="tools-tab-button" type="button" role="tab" aria-selected="false" data-tool-tab="toolPlan"><span>🧭</span><strong>Plan</strong><small>Ruta de repaso</small></button>
+            <button class="tools-tab-button" type="button" role="tab" aria-selected="false" data-tool-tab="toolSimulador"><span>📝</span><strong>Simulador</strong><small>Practicar examen</small></button>
+          </div>
+        </div>
+        <div class="tools-layout">
+          <article class="portal-card tool-panel active" id="toolCalculadora" data-tool-panel="toolCalculadora">
+            <span class="tool-kicker">Notas y aprobación</span>
+            <h3>Calculadora de promedio</h3>
+            <p>Ingresa cada nota sobre 100. La calculadora la convierte automáticamente a su valor real: Aprovechamiento 1 vale 25, Interciclo 20, Aprovechamiento 2 vale 25 y el examen final 30. La aprobación mínima es 60/100, pero en el examen final siempre se debe sacar mínimo 12/30.</p>
+            <div class="portal-form-grid">
+              <label><span>Ciclo</span><select id="gpaCycle"></select></label>
+              <label><span>Materia</span><select id="gpaSubject"></select></label>
+            </div>
+            <div id="gpaRows"></div>
+            <div class="inline-actions"><button class="btn-primary" id="calculateGpa" type="button">Calcular nota final necesaria</button></div>
+            <div class="result-card" id="gpaResult"></div>
+          </article>
+
+          <article class="portal-card tool-panel" id="toolHorario" data-tool-panel="toolHorario">
+            <span class="tool-kicker">Planificación semanal</span>
+            <div class="view-heading"><div><h3>Horario del ciclo actual</h3><p>Arma tu horario por materia hasta quinto ciclo, separado por grupo.</p></div><div class="inline-actions"><button class="btn-secondary" id="printToolsButton" type="button">Imprimir horario</button></div></div>
+            <div class="portal-form-grid schedule-builder">
+              <label><span>Ciclo</span><select id="scheduleCycle"></select></label>
+              <label><span>Grupo</span><select id="scheduleGroup"><option>Grupo 1</option><option>Grupo 2</option><option>Grupo 3</option></select></label>
+              <label><span>Materia</span><select id="scheduleSubject"></select></label>
+              <label><span>Día</span><select id="scheduleDay"><option>Lunes</option><option>Martes</option><option>Miércoles</option><option>Jueves</option><option>Viernes</option></select></label>
+              <label><span>Inicio</span><input id="scheduleStart" type="time" value="07:00"></label>
+              <label><span>Fin</span><input id="scheduleEnd" type="time" value="09:00"></label>
+              <label><span>Aula / lugar</span><input id="scheduleAula" type="text" placeholder="Aula, laboratorio o virtual"></label>
+              <label><span>Docente</span><input id="scheduleDocente" type="text" placeholder="Nombre del docente o tutor"></label>
+              <button class="btn-primary" id="addStudentSchedule" type="button">Agregar materia</button>
+            </div>
+            <div class="table-wrap" id="scheduleTableWrap"></div>
+          </article>
+
+          <article class="portal-card tool-panel" id="toolMalla" data-tool-panel="toolMalla">
+            <span class="tool-kicker">Seguimiento académico</span>
+            <h3>Avance de Malla Curricular</h3>
+            <p>Registra el estado de cada materia y visualiza tu progreso académico general.</p>
+            <div class="curriculum-progress"><span id="curriculumProgressBar"></span></div>
+            <p id="curriculumProgressText" class="form-note"></p>
+            <div class="curriculum-grid" id="curriculumGrid"></div>
+          </article>
+
+          <article class="portal-card tool-panel pomodoro-panel" id="toolPomodoro" data-tool-panel="toolPomodoro">
+            <span class="tool-kicker">Concentración</span>
+            <h3>Modo Focus Pomodoro</h3>
+            <p>Temporizador de estudio para bloques de concentración. Ideal para repasar apuntes, resolver ejercicios o preparar exámenes.</p>
+            <label class="pomodoro-mode-select"><span>Modo</span><select id="pomodoroMode"><option value="study">Trabajo · 25 min</option><option value="short">Descanso corto · 5 min</option><option value="long">Descanso largo · 15 min</option></select></label>
+            <span class="pomodoro-status" id="pomodoroStatus">Sesión de estudio</span>
+            <div class="pomodoro-circle">
+              <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="pomodoro-track" cx="60" cy="60" r="50" /><circle class="pomodoro-progress-ring" id="pomodoroProgress" cx="60" cy="60" r="50" /></svg>
+              <div class="pomodoro-display" id="pomodoroDisplay">25:00</div>
+            </div>
+            <div class="portal-form-grid">
+              <label><span>Estudio</span><input id="pomodoroStudy" type="number" min="5" max="90" value="25"></label>
+              <label><span>Descanso</span><input id="pomodoroBreak" type="number" min="1" max="30" value="5"></label>
+            </div>
+            <p class="form-note" id="pomodoroSessions">0 sesiones completadas.</p>
+            <div class="inline-actions">
+              <button class="btn-primary" id="pomodoroStart" type="button">Iniciar</button>
+              <button class="btn-secondary" id="pomodoroPause" type="button">Pausar</button>
+              <button class="btn-secondary" id="pomodoroReset" type="button">Reiniciar</button>
+            </div>
+          </article>
+
+          <article class="portal-card tool-panel formula-panel" id="toolFormulas" data-tool-panel="toolFormulas">
+            <span class="feature-badge recommended">Recomendado</span>
+            <span class="tool-kicker">Consulta rápida</span>
+            <h3>Banco de fórmulas</h3>
+            <p>Consulta fórmulas, métodos y conceptos clave por materia de la malla. Se muestran de 4 en 4 para mantener la vista limpia.</p>
+            <label><span>Materia</span><select id="formulaSubject"></select></label>
+            <div class="formula-list" id="formulaList"></div>
+          </article>
+
+          <article class="portal-card tool-panel data-sources-panel" id="toolDataSources" data-tool-panel="toolDataSources">
+            <span class="feature-badge recommended">Datos oficiales</span>
+            <span class="tool-kicker">Investigación empresarial</span>
+            <h3>Fuentes para empresas y mercados</h3>
+            <p>Consulta fuentes oficiales sobre empresas, empleo, finanzas, comercio y entorno de mercado para tus trabajos y proyectos.</p>
+            <div class="data-source-controls">
+              <label class="data-source-search"><span>Buscar fuente o tema</span><input id="dataSourceSearch" type="search" placeholder="Empresas, empleo, emprendimiento, finanzas, comercio..." autocomplete="off"></label>
+              <div class="data-source-filter-wrap">
+                <span>Filtrar por categoría</span>
+                <div class="data-source-filters" id="dataSourceFilters" aria-label="Filtros de fuentes de datos"></div>
+              </div>
+            </div>
+            <div class="data-source-summary" id="dataSourceSummary"></div>
+            <div class="data-source-grid" id="dataSourceGrid"></div>
+            <p class="data-source-note"><strong>Recomendación:</strong> al usar datos en trabajos académicos, cita siempre la institución, el año y el enlace de consulta.</p>
+          </article>
+
+          <article class="portal-card tool-panel mini-ai-panel ai-pro-panel" id="toolIA" data-tool-panel="toolIA">
+            <span class="feature-badge new">IA rápida</span>
+            <span class="tool-kicker">Asistente académico del portal</span>
+            <h3>Asistente IA académico</h3>
+            <p>Pregunta en lenguaje normal. El asistente responde primero con cálculos locales, fórmulas y la información guardada en el portal. Drive y el apoyo web funcionan como consulta adicional para no dejar la pantalla cargando demasiado.</p>
+            <div class="ai-capability-grid" aria-label="Capacidades del asistente IA">
+              <span>📚 Busca en materiales y libros del portal</span>
+              <span>📄 Usa PDFs y documentos de Drive cuando Apps Script los encuentre</span>
+              <span>🧮 Resuelve cálculos, porcentajes y ecuaciones simples</span>
+              <span>🌐 Consulta resumen en línea si activas apoyo web</span>
+            </div>
+            <div class="portal-form-grid ai-pro-form">
+              <label><span>Materia</span><select id="aiSubject"></select></label>
+              <label><span>Modo de respuesta</span><select id="aiMode"><option value="study">Explicación detallada</option><option value="solve">Resolver problema paso a paso</option><option value="summary">Resumen rápido</option><option value="materials">Buscar materiales</option></select></label>
+              <label class="full"><span>Pregunta</span><textarea id="aiQuestion" placeholder="Ejemplo: calcula el punto de equilibrio, explica la razón corriente, busca materiales de marketing o resume mis apuntes de finanzas corporativas..."></textarea></label>
+            </div>
+            <div class="ai-switch-row">
+              <label><input id="aiDeepDrive" type="checkbox" checked> Buscar en Drive con espera corta</label>
+              <label><input id="aiOnlineSearch" type="checkbox"> Apoyo web rápido</label>
+            </div>
+            <div class="ai-quick-prompts">
+              <button class="mini-action" type="button" data-ai-prompt="Resuelve paso a paso: 20% de 350">Resolver ejemplo</button>
+              <button class="mini-action" type="button" data-ai-prompt="Busca materiales y ejercicios de Álgebra Lineal">Materiales de Drive</button>
+              <button class="mini-action" type="button" data-ai-prompt="Explícame las fórmulas principales de Estadística I">Fórmulas</button>
+              <button class="mini-action" type="button" data-ai-prompt="¿Qué exámenes están disponibles para Matemáticas I?">Exámenes</button>
+              <button class="mini-action" type="button" data-ai-prompt="Analiza ventas, costos y margen de contribución de una empresa con un ejemplo">Análisis empresarial</button>
+              <button class="mini-action" type="button" data-ai-prompt="¿Dónde consigo estadísticas oficiales de empresas, empleo y emprendimiento en Ecuador?">Fuentes oficiales</button>
+            </div>
+            <button class="btn-primary ai-main-button" id="aiAskButton" type="button">Responder rápido</button>
+            <div class="mini-ai-result" id="aiResult"></div>
+            <div class="mini-ai-admin">
+              <h4>Base de libros y apuntes</h4>
+              <p>Para que la IA responda con más contenido de tus libros, pega aquí extractos autorizados o resúmenes de capítulos. Los PDFs de Drive pueden aparecer por nombre y búsqueda, pero para respuestas largas conviene agregar texto.</p>
+              <label><span>Título o libro</span><input id="aiSourceTitle" type="text" placeholder="Ej. Administración: una perspectiva global, capítulo 4"></label>
+              <label><span>Extracto del libro</span><textarea id="aiSourceText" placeholder="Pega aquí un resumen, capítulo o fragmento autorizado para consultar."></textarea></label>
+              <button class="btn-secondary" id="aiAddSource" type="button">Agregar a base</button>
+            </div>
+          </article>
+
+          <article class="portal-card tool-panel study-plan-panel" id="toolPlan" data-tool-panel="toolPlan">
+            <span class="feature-badge new">Nuevo</span>
+            <span class="tool-kicker">Ruta de repaso</span>
+            <h3>Plan de estudio por materia</h3>
+            <p>Elige materia y fecha de examen para generar una ruta breve de repaso.</p>
+            <div class="portal-form-grid">
+              <label><span>Materia</span><select id="studyPlanSubject"></select></label>
+              <label><span>Fecha de examen</span><input id="studyPlanDate" type="date"></label>
+            </div>
+            <button class="btn-primary" id="generateStudyPlan" type="button">Generar plan</button>
+            <div class="study-plan-result" id="studyPlanResult"></div>
+          </article>
+
+          <article class="portal-card tool-panel exam-sim-panel" id="toolSimulador" data-tool-panel="toolSimulador">
+            <span class="feature-badge popular">Popular</span>
+            <span class="tool-kicker">Práctica</span>
+            <h3>Simulador de examen</h3>
+            <p>Practica preguntas del banco según la materia seleccionada.</p>
+            <div class="portal-form-grid">
+              <label><span>Ciclo</span><select id="examSimCycle"></select></label>
+              <label><span>Materia</span><select id="examSimSubject"></select></label>
+              <label><span>Dificultad</span><select id="examSimDifficulty"><option value="facil">Fácil</option><option value="medio">Medio</option><option value="dificil">Difícil</option></select></label>
+            </div>
+            <button class="btn-primary" id="startExamSim" type="button">Iniciar simulador</button>
+            <div class="exam-sim-result" id="examSimResult"></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="page-section" id="banco" data-section="banco">
+      <div class="section-wrap">
+        <div class="section-header"><span class="section-tag">Preparación</span><h2>Banco de Exámenes</h2><p>Consulta referencias y enlaza nuevos exámenes desde el repositorio.</p></div>
+        <div class="filter-row banco-filters">
+          <select id="bancoFilterCiclo" hidden></select>
+          <div class="subject-chip-panel banco-cycle-browser" id="bancoSubjectChips" data-subject="all"></div>
+          <select id="bancoFilterTipo"><option value="">Todos los tipos</option><option>Interciclo</option><option>Final</option><option>Deber</option><option>Práctica</option><option>Lección</option></select>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>Ciclo</th><th>Materia</th><th>Tipo</th><th>Periodo</th><th>Acción</th></tr></thead><tbody id="bancoTableBody"></tbody></table></div>
+        <p class="form-note">Este banco tiene fines académicos. No reemplaza la preparación completa.</p>
+      </div>
+    </section>
+
+    <section class="page-section" id="consultas" data-section="consultas">
+      <div class="section-wrap">
+        <div class="section-header"><span class="section-tag">Comunicación institucional</span><h2>Consultas y preguntas</h2><p>Escríbenos con confianza. Tu mensaje llega directamente al correo oficial de la ASO de Administración de Empresas y un representante te responderá personalmente.</p></div>
+        <div class="contact-layout">
+          <form class="portal-form contact-form" id="consultaForm" novalidate>
+            <header class="contact-form-head">
+              <span class="contact-kicker">Formulario oficial</span>
+              <h3>Enviar consulta</h3>
+              <p>Los campos marcados son necesarios para darte una respuesta precisa.</p>
+            </header>
+            <div class="portal-form-grid">
+              <label><span>Nombre completo</span><input name="Nombre" id="consultaNombre" type="text" autocomplete="name" placeholder="Nombres y apellidos" required></label>
+              <label><span>Correo electrónico</span><input name="Correo" id="consultaEmail" type="email" autocomplete="email" placeholder="usuario@ucuenca.edu.ec" required></label>
+              <label><span>Ciclo</span><select name="Ciclo" id="consultaCiclo" required></select></label>
+              <label><span>Tipo de consulta</span><select name="Tipo de consulta" id="consultaTipo" required><option value="">Seleccionar tipo</option><option>Materias</option><option>Horarios</option><option>Docentes</option><option>Repositorio</option><option>Tutorías</option><option>Trámites</option><option>Otro</option></select></label>
+              <label class="full"><span>Mensaje</span><textarea name="Mensaje" id="consultaMensaje" placeholder="Describe tu consulta con el mayor detalle posible…" required></textarea></label>
+            </div>
+            <div class="contact-phone">
+              <div class="contact-phone-copy">
+                <strong>Déjanos tu número de teléfono</strong>
+                <p>Así podremos comunicarnos contigo a la brevedad posible, por llamada o WhatsApp.</p>
+              </div>
+              <label><span>Teléfono o WhatsApp</span><input name="Telefono" id="consultaTelefono" type="tel" inputmode="tel" autocomplete="tel" placeholder="09XX XXX XXX" maxlength="20" required></label>
+            </div>
+            <div class="contact-actions">
+              <button class="btn-primary" type="submit">Enviar consulta</button>
+              <p class="contact-privacy">Tus datos se usan únicamente para responder esta consulta.</p>
+            </div>
+          </form>
+          <aside class="contact-aside" aria-label="Información de contacto">
+            <div class="contact-card">
+              <span class="contact-kicker">Atención estudiantil</span>
+              <h3>Estamos para ayudarte</h3>
+              <ul class="contact-points">
+                <li><span class="contact-icon" aria-hidden="true">✉</span><div><small>Correo oficial</small><a href="mailto:asoadmiucuenca@gmail.com">asoadmiucuenca@gmail.com</a></div></li>
+                <li><span class="contact-icon" aria-hidden="true">◷</span><div><small>Tiempo de respuesta</small><strong>Lo antes posible, en días hábiles</strong></div></li>
+                <li><span class="contact-icon" aria-hidden="true">#</span><div><small>Seguimiento</small><strong>Recibirás un código de consulta</strong></div></li>
+              </ul>
+            </div>
+            <div class="faq-list" id="faqList"></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+
+
+    <section class="page-section" id="docentes" data-section="docentes"><div class="section-wrap"><div class="section-header"><span class="section-tag">Contacto académico</span><h2>Docentes</h2><p>Directorio editable desde el panel de administración.</p></div><div class="card-grid" id="docentesContainer"></div></div></section>
+
+    <section class="page-section quick-section" id="recursos" data-section="recursos"><div class="section-wrap"><div class="section-header inverse"><span class="section-tag">Accesos directos</span><h2>Recursos Rápidos</h2><p>Atajos a servicios frecuentes del estudiante.</p></div><div class="quick-grid" id="recursosContainer"></div></div></section>
+    <section class="page-section" id="oportunidades" data-section="oportunidades"><div class="section-wrap"><div class="section-header"><span class="section-tag">Bolsa y becas</span><h2>Oportunidades</h2><p>Pasantías, becas, cursos y convocatorias.</p></div><div class="card-grid" id="oportunidadesContainer"></div></div></section>
+
+    <section class="page-section representantes-section" id="representantes" data-section="representantes"><div class="section-wrap"><div class="section-header inverse"><span class="section-tag">PERSONAS QUE TE REPRESENTAN · 2026–2027</span><h2>Tu voz.<br>Nuestro compromiso.</h2><p>Una directiva cercana para acompañar tus ideas y construir una mejor experiencia universitaria.</p></div><div class="card-grid" id="representantesContainer"></div></div></section>
+    <section class="page-section" id="gracias" data-section="gracias"><div class="section-wrap"><div class="section-header"><span class="section-tag">Mensaje enviado</span><h2>Gracias</h2><p>Tu información fue registrada. El equipo de ASO ADE puede consultarla en su panel privado.</p></div><div class="quick-row" style="justify-content:center"><a class="btn-primary" href="#inicio" data-tab="inicio">Volver al inicio</a><a class="btn-secondary" href="#repositorio" data-tab="repositorio">Ir al repositorio</a></div></div></section>
+  </main>
+
+  <footer class="site-footer"><div class="footer-editorial"><span>ASO ADE / 2026 — 2027</span><p>Lo que viene, lo construimos juntos.</p><a href="#consultas" data-tab="consultas" aria-label="Contactar con ASO ADE">Hablemos <span aria-hidden="true">↗</span></a></div>
+    <div class="footer-inner">
+      <div class="footer-col">
+        <div class="footer-brand-row"><img class="footer-brand-image" src="assets/logo-aso-ade-192.png" width="48" height="48" loading="lazy" decoding="async" alt="ASO Administración de Empresas"><span>ASO Administración de Empresas · 2026–2027</span></div>
+        <p>Información de la carrera, representantes, recursos académicos y herramientas para estudiantes de Administración de Empresas.</p>
+      </div>
+      <div class="footer-col">
+        <h3>Links rápidos</h3>
+        <div class="footer-links">
+          <a href="#informacion" data-tab="informacion">Información</a>
+          <a href="#repositorio" data-tab="repositorio">Repositorio</a>
+          <a href="#herramientas" data-tab="herramientas">Herramientas</a>
+
+          <button type="button" data-app="glossary">Glosario de Administración</button>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h3>Contacto</h3>
+        <div class="footer-links">
+          <a href="#docentes" data-tab="docentes">Docentes</a>
+          <a href="#consultas" data-tab="consultas">Consultas</a>
+          <button class="admin-open" id="adminOpenButton" type="button" aria-label="Abrir panel administrador">Panel administrador</button>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom"><span>© ASO ADE · Universidad de Cuenca</span><span>Desarrollador: <strong>Santiago León</strong></span><span>Presidente ASO ADE: <strong>Ismael Masache</strong></span></div>
+  </footer>
+
+
+  <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+  <nav class="mobile-bottom-nav" aria-label="Navegación inferior móvil">
+    <a href="#inicio" data-tab="inicio"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-7h6v7"/></svg><span>Inicio</span></a>
+    <a href="#repositorio" data-tab="repositorio"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h5a3 3 0 0 1 3 3v14a4 4 0 0 0-4-2H4zM12 7a3 3 0 0 1 3-3h5v15h-4a4 4 0 0 0-4 2"/></svg><span>Repositorio</span></a>
+    <button type="button" data-mobile-search=""><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg><span>Buscar</span></button>
+    <button type="button" data-mobile-profile=""><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg><span>Perfil</span></button>
+    <button type="button" data-mobile-more=""><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg><span>Más</span></button>
+  </nav>
+
+  <div class="command-modal" id="commandPalette" role="dialog" aria-modal="true" aria-label="Búsqueda global" hidden>
+    <div class="command-box">
+      <div class="command-search">
+        <input id="commandInput" type="search" aria-label="Buscar en el portal" placeholder="Buscar materias, recursos, herramientas o representantes…" autocomplete="off">
+        <button class="icon-only" id="commandClose" type="button" aria-label="Cerrar búsqueda">×</button>
+      </div>
+      <div class="command-results" id="commandResults"></div>
+    </div>
+  </div>
+
+  <div class="app-backdrop" id="appBackdrop" hidden></div>
+  <aside class="app-panel" id="appPanel" aria-label="Mini aplicación" hidden>
+    <header class="app-header">
+      <div><span class="section-tag" id="appPanelCrumb">Mini app</span><h2 id="appPanelTitle">Aplicación</h2></div>
+      <button class="app-close" type="button" id="appPanelClose" aria-label="Cerrar aplicación">×</button>
+    </header>
+    <div class="app-panel-content" id="appPanelContent"></div>
+  </aside>
+  <section class="app-modal" id="appModal" role="dialog" aria-modal="true" aria-label="Mini aplicación de aprendizaje" hidden>
+    <header class="app-header">
+      <div><span class="section-tag" id="appModalCrumb">Mini app</span><h2 id="appModalTitle">Aplicación</h2></div>
+      <button class="app-close" type="button" id="appModalClose" aria-label="Cerrar aplicación">×</button>
+    </header>
+    <div class="app-modal-body" id="appModalContent"></div>
+  </section>
+
+  <div class="modal" id="materialModal" role="dialog" aria-modal="true" hidden>
+    <div class="modal-backdrop" data-close-modal=""></div>
+    <form class="modal-card" id="materialForm" novalidate>
+      <div class="modal-header"><div><span class="eyebrow">Nuevo recurso</span><h2>Agregar material académico</h2></div><button class="icon-only" type="button" data-close-modal="" aria-label="Cerrar formulario de material">×</button></div>
+      <div class="portal-form-grid">
+        <label><span>Título</span><input id="materialTitle" name="title" type="text" required></label>
+        <label><span>Tipo</span><select id="materialType" name="type" required></select></label>
+        <label class="full"><span>Descripción</span><textarea id="materialDescription" name="description" required></textarea></label>
+        <label class="full"><span>Link de Google Drive o PDF externo</span><input id="materialUrl" name="url" type="url" placeholder="https://drive.google.com/file/d/ID/view?usp=sharing"><small class="field-note">Pega aquí el enlace compartido. El portal lo convertirá automáticamente en vista previa dentro de la página.</small></label>
+        <label class="full"><span>Subir PDF local pequeño</span><input id="materialFile" name="file" type="file" accept="application/pdf,.pdf"><small class="field-note">Opcional solo para PDFs livianos. Para archivos pesados usa Google Drive y pega el enlace arriba.</small></label>
+        <label><span>Persona que sube</span><input id="materialUploader" name="uploader" type="text" required></label>
+        <label><span>Fecha</span><input id="materialDate" name="date" type="date" required></label>
+        <label><span>Ciclo</span><select id="materialCycle" name="cycle" required></select></label>
+        <label><span>Materia</span><select id="materialSubject" name="subject" required></select></label>
+      </div>
+      <div class="modal-actions"><button class="btn-secondary" type="button" data-close-modal="">Cancelar</button><button class="btn-primary" type="submit">Guardar material</button></div>
+    </form>
+  </div>
+
+  <div class="modal" id="requestModal" role="dialog" aria-modal="true" hidden>
+    <div class="modal-backdrop" data-close-request=""></div>
+    <div class="modal-card" id="requestModalContent"></div>
+  </div>
+
+  <div class="modal" id="adminLoginModal" role="dialog" aria-modal="true" hidden>
+    <div class="modal-backdrop" data-close-login=""></div>
+    <form class="modal-card" id="adminLoginForm">
+      <div class="modal-header"><div><span class="eyebrow">Acceso privado</span><h2>Panel administrador</h2></div><button class="icon-only" type="button" data-close-login="" aria-label="Cerrar acceso administrador">×</button></div>
+      <label><span>Correo administrador</span><input id="adminEmailInput" type="email" autocomplete="username" placeholder="correo autorizado"></label>
+      <label><span>Contraseña</span><input id="adminPasswordInput" type="password" autocomplete="current-password" placeholder="Ingresa la contraseña"></label>
+      <p class="admin-security-note">Acceso privado de ASO ADE. Tu contraseña se verifica en el servidor y la sesión se cierra tras 30 minutos de inactividad.</p>
+      <div class="modal-actions"><button class="btn-secondary" type="button" data-close-login="">Cancelar</button><button class="btn-primary" type="submit">Entrar</button></div>
+    </form>
+  </div>
+
+  <div aria-label="Centro de control ASO ADE" aria-modal="true" role="dialog" class="adm" id="adminPanel" hidden>
+    <div class="adm-shell">
+      <aside class="adm-sidebar" aria-label="Navegación de administración">
+        <div class="adm-brand">
+          <img src="assets/logo-aso-ade-192.png" width="36" height="36" alt="">
+          <div class="adm-brand-text"><strong>ASO ADE</strong><span>Centro de control</span></div>
+          <button class="adm-icon-btn adm-collapse" type="button" data-adm-collapse aria-label="Contraer o expandir menú lateral"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18v16H3zM9 4v16"/></svg></button>
+        </div>
+        <nav class="adm-nav" id="adminTabs"></nav>
+        <div class="adm-sidebar-foot">
+          <button class="adm-nav-item" type="button" data-adm-close-panel><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></svg><span>Ver portal</span></button>
+          <button class="adm-nav-item" type="button" data-adm-logout><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h11"/></svg><span>Cerrar sesión</span></button>
+        </div>
+      </aside>
+      <div class="adm-nav-scrim" aria-hidden="true"></div>
+      <div class="adm-main">
+        <header class="adm-topbar">
+          <button class="adm-icon-btn adm-menu-btn" type="button" data-adm-toggle-nav aria-label="Abrir menú de administración"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+          <nav class="adm-breadcrumbs" id="admBreadcrumbs" aria-label="Ruta"></nav>
+          <div class="adm-search" role="search">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 17a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13M15.5 15.5 21 21"/></svg>
+            <input id="admSearch" type="search" autocomplete="off" placeholder="Buscar en la administración…" aria-label="Buscar en la administración" role="combobox" aria-expanded="false" aria-controls="admSearchResults" aria-autocomplete="list">
+            <kbd>/</kbd>
+            <div class="adm-search-results" id="admSearchResults" role="listbox" hidden></div>
+          </div>
+          <div class="adm-topbar-actions">
+            <div id="publishStatus" class="adm-publish" role="status" aria-live="polite" data-state="saved"><i aria-hidden="true"></i><span data-publish-label>Conectado al servidor</span></div>
+            <div class="adm-menu-wrap">
+              <button class="adm-btn primary sm" type="button" data-adm-menu-toggle aria-haspopup="true" aria-expanded="false"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Nuevo</span></button>
+              <div class="adm-menu right" role="menu" hidden>
+                <button type="button" role="menuitem" data-adm-new="resources">Recurso del repositorio</button>
+                <button type="button" role="menuitem" data-adm-new="representantes">Representante</button>
+                <button type="button" role="menuitem" data-adm-new="oportunidades">Oportunidad</button>
+                <button type="button" role="menuitem" data-adm-new="tutorias">Tutoría</button>
+                <button type="button" role="menuitem" data-adm-new="docentes">Docente</button>
+                <button type="button" role="menuitem" data-adm-view="alertas">Mensaje institucional</button>
+              </div>
+            </div>
+            <button class="adm-icon-btn adm-inbox-btn" type="button" data-adm-view="mensajes" aria-label="Solicitudes abiertas"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 13l3-8h12l3 8v6H3zM3 13h5l1 3h6l1-3h5"/></svg><span class="adm-nav-badge" id="admOpenCount" hidden>0</span></button>
+          </div>
+        </header>
+        <main class="adm-content" id="adminContent" tabindex="-1"></main>
+      </div>
+    </div>
+    <div class="adm-drawer-host" id="adminDrawer" hidden></div>
+  </div>
+  <div class="home-preview-bar" id="homePreviewBar" role="region" aria-label="Vista previa de portada" hidden>
+    <span><strong>Vista previa</strong> · estos cambios aún no están publicados</span>
+    <div><button class="btn-secondary" type="button" data-preview-exit>Volver al editor</button><button class="btn-primary" type="button" data-preview-publish>Publicar portada</button></div>
+  </div>
+  <button class="back-to-top" id="backToTopButton" type="button" aria-label="Volver arriba">↑</button>
+  <script src="public-config.js" defer></script><script src="runtime.js" defer></script><script src="firebase-config.js" defer></script><script src="firebase-student.js" defer></script><script src="student-store.js?v=2" defer></script>
+  <script src="vendor/purify.min.js" defer></script><script src="experience.js?v=pro-4" defer></script><script src="constants.js?v=ade-v2" defer></script>
+  <script src="curriculum.js?v=2" defer></script><script src="portal.js?v=mobile-2" defer></script><script src="admin.js?v=adm-1" defer></script><script src="student-account.js?v=1" defer></script>
+
+</body>
+</html>

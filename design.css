@@ -1,0 +1,634 @@
+/* ASO ADE / Estudio editorial. Tokens, componentes, composición y movimiento. */
+:root{--font-body:'Manrope',system-ui,sans-serif;--font-display:'Space Grotesk',system-ui,sans-serif;--ink:#17283e;--muted:#596677;--paper:#f7f8fa;--surface:#fff;--surface-soft:#eef2f8;--blue:#334dc5;--deep:#1a2c50;--accent:#c6d4fa;--on-deep:#f8faff;--on-deep-muted:#c4d0e5;--line:#dfe5ec;--radius:18px;--radius-small:10px;--shadow:0 12px 35px #192d5210;--space-1:8px;--space-2:16px;--space-3:24px;--space-4:32px;--space-5:48px;--space-6:64px;--type-label:12px;--type-body:15px;--type-title:clamp(34px,4.4vw,60px);--motion-fast:180ms;--motion-normal:360ms;--motion-ease:cubic-bezier(.22,1,.36,1);--navy:var(--ink);--azul-acento:var(--blue);--azul-principal:var(--deep);--lime:var(--accent)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body)!important;line-height:1.65}
+body *{box-sizing:border-box}
+body :is(h1,h2,h3,h4,h5,h6,.wordmark,.folder-title,.footer-brand-row,.gpa-block h3){font-family:var(--font-display)!important;letter-spacing:-.04em}
+body :is(button,input,select,textarea,label,p,a,small){font-family:var(--font-body)!important}
+body :is(h1,h2,h3,h4){color:var(--ink)}
+body button,body a{touch-action:manipulation}
+body a,body button,body input,body select,body textarea{transition:background var(--motion-fast),color var(--motion-fast),border-color var(--motion-fast),box-shadow var(--motion-fast),transform var(--motion-normal) var(--motion-ease)}
+:focus-visible{outline:3px solid #647de3!important;outline-offset:4px}
+[hidden]{display:none!important}
+.ui-icon{width:20px;height:20px;display:inline-block;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle}
+.skip-link{position:fixed;left:20px;top:-100px;z-index:99999;background:var(--ink);color:var(--surface);padding:12px 20px;border-radius:10px}
+.skip-link:focus{top:12px}
+body main,body.admin-active main{padding-top:0!important}
+body .page-section{padding:0!important;background:var(--paper);min-height:60vh}
+body .section-wrap{width:min(1280px,90%);max-width:1280px;margin:auto;padding:56px 0}
+body .section-header{max-width:1040px;text-align:left;margin:0 0 38px}
+body .section-header h2{font-size:var(--type-title);font-weight:500;line-height:1.08;text-wrap:balance;margin:18px 0;max-width:920px}
+body .section-header p{font-size:15px;line-height:1.8;max-width:640px;color:var(--muted)}
+body .section-tag,body .eyebrow{display:inline-block;padding:0;background:none;border:0;border-radius:0;color:var(--blue);font:800 10px/1.5 var(--font-body);letter-spacing:.13em;text-transform:uppercase}
+body .section-tag::before,body .section-tag::after{display:none!important}
+
+/* Navigation: a quiet floating surface with one consistent icon family. */
+body .site-nav{inset:auto;z-index:100;border:1px solid var(--line);background:#fffffff0;box-shadow:0 5px 22px #192d5208;backdrop-filter:blur(8px)}
+body .site-nav .nav-inner{max-width:none;min-height:70px;height:auto;margin:auto;padding:10px 0;gap:14px}
+body .nav-logo{display:flex;align-items:center;gap:10px;min-width:184px;color:var(--ink);text-decoration:none}
+.nav-brand-image,.footer-brand-image{object-fit:contain;flex-shrink:0;border-radius:10px}
+body .nav-brand-image{width:42px;height:42px}
+body .wordmark{font-size:18px;line-height:1.15;font-weight:700;color:var(--ink)}
+body .wordmark small{display:block;margin-top:5px;font:700 7px/1.3 var(--font-body);letter-spacing:.12em}
+body .nav-links{gap:2px}
+body .nav-links>a,body .nav-menu-toggle{font-size:12px;font-weight:700;min-height:44px;padding:10px 8px;color:var(--ink);border-radius:9px}
+body .nav-links>a.active,body .nav-menu-toggle.active{color:var(--blue);background:var(--surface-soft);text-decoration:none}
+body .nav-dropdown{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 45px #192d5217}
+body .nav-icon-button{display:grid;place-items:center;width:42px;min-width:42px;height:42px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:50%}
+body .services-trigger{display:flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:9px 13px;max-width:none;font-size:11px;border-radius:24px;background:var(--surface-soft);color:var(--ink)}
+body #darkModeToggle .ui-icon{width:17px;height:17px}
+body .hamburger{min-width:44px;min-height:44px}
+body .admin-mode-bar{background:var(--surface-soft);color:var(--ink);border-bottom:1px solid var(--line)}
+body .admin-mode-bar button{min-height:32px;padding:5px 14px;color:var(--ink);border-radius:7px}
+
+/* Buttons, form controls and shared surfaces. */
+body .btn-primary,body .btn-secondary,body .btn-ghost{display:inline-flex;align-items:center;justify-content:center;gap:18px;min-height:46px;padding:12px 20px;border-radius:var(--radius-small);font-size:13px;font-weight:700;text-decoration:none;box-shadow:none}
+body .btn-primary{background:var(--blue);border:1px solid var(--blue);color:#fff}
+body .btn-primary:hover{background:#253eaa;box-shadow:0 8px 22px #334dc51c;transform:translateY(-2px)}
+body .btn-secondary,body .btn-ghost{background:var(--surface);border:1px solid var(--line);color:var(--ink)}
+body .btn-secondary:hover,body .btn-ghost:hover{color:var(--blue);border-color:#9baedb;transform:translateY(-2px)}
+body input:not([type=checkbox]):not([type=radio]),body select,body textarea{min-height:46px;max-width:100%;padding:10px 13px;border:1px solid #b9c6d8;border-radius:10px;background:var(--surface);color:var(--ink);font-size:14px;box-shadow:none}
+body input::placeholder,body textarea::placeholder{color:#6e7b8e}
+body label>span{color:var(--ink);font-size:12px;font-weight:700}
+body input[type=checkbox]{accent-color:var(--blue);min-width:18px;min-height:18px}
+body .portal-card,body .app-card,body .syllabus-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:none}
+body .portal-card{position:relative;padding:26px}
+body .portal-card h3{font-size:24px;line-height:1.25}
+body .portal-card p{font-size:14px;color:var(--muted);line-height:1.8}
+body .card-grid{gap:24px}
+body .portal-card:hover{border-color:#a9b9dc;box-shadow:var(--shadow);transform:translateY(-3px)}
+body .empty-state{min-height:0!important;padding:22px!important;border:1px dashed var(--line);border-radius:12px;background:var(--surface-soft);color:var(--muted);font-size:13px}
+body .empty-state::before{display:none!important}
+body .empty-state strong{display:block;color:var(--ink)}
+body .empty-state span{display:block;line-height:1.75}
+
+/* Inicio inspirado en el respaldo: presentación y semestre / contexto y recursos. */
+body .hero-section{overflow:clip;background:radial-gradient(ellipse at 0 0,#e9eefb70,transparent 55%),var(--paper)}
+body .hero-editorial-copy{min-width:0}
+body .hero-editorial-copy>p{font-size:14px;line-height:1.9;color:var(--muted);max-width:560px;margin:0 0 24px}
+body .hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:24px;margin:0 0 24px}
+body .hero-actions .btn-primary{padding:14px 20px;gap:24px}
+
+/* Homepage bento: content-sized tracks, no nested scrolling or stretched boxes. */
+body .dashboard-heading{display:grid;grid-template-columns:1.5fr 1fr;align-items:end;gap:18px;width:min(1280px,90%);margin:0 auto 32px}
+body .dashboard-heading .section-tag{grid-column:1/-1}
+body .dashboard-heading h2{font-size:clamp(32px,4vw,52px);font-weight:500;line-height:1.1;margin:0}
+body .dashboard-heading p{max-width:330px;justify-self:end;margin:0;font-size:14px;color:var(--muted)}
+body .hero-section .hero-wrap{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:24px!important;width:min(1280px,90%);max-width:1280px;padding:0 0 64px;align-items:stretch!important}
+body .hero-intro,body .hero-panel{display:contents!important;position:static!important;height:auto!important;max-height:none!important;min-height:0!important;padding:0!important;border:0;background:none!important;box-shadow:none!important;overflow:visible!important}
+body .hero-intro>*,body .hero-panel>*{min-width:0;max-height:none;flex-shrink:0}
+body .semester-widget{grid-column:1/span 7;grid-row:1/span 2;margin:0;padding:28px;border:1px solid var(--line);border-radius:24px;background:var(--surface);color:var(--ink);box-shadow:none}
+body .semester-widget :is(h2,h3,h4,p,span,strong,label){color:var(--ink)!important}
+body .semester-widget .widget-label{font-size:10px;padding:0;background:none;letter-spacing:.12em;color:var(--blue)!important}
+body .semester-widget .semester-head{display:block}
+body .semester-widget .semester-head h2{font-size:29px;font-weight:500;line-height:1.2;margin:12px 0}
+body .semester-widget .semester-head p{font-size:13px;line-height:1.8;color:var(--muted)!important}
+body .semester-widget .semester-head>label{display:flex;align-items:center;gap:12px;margin:18px 0}
+body .semester-widget .semester-head select{width:auto;flex:1;min-width:0}
+body .semester-widget :is(.semester-material,.semester-tutoria){background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:10px}
+body .academic-metrics{grid-column:8/-1;grid-row:1;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px!important;background:none;border:0;border-radius:0;overflow:visible}
+body .academic-metrics .metric-card{padding:20px;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:none;text-align:left;min-height:106px}
+body .academic-metrics .metric-card:first-child{background:var(--surface-soft);border-color:transparent}
+body .academic-metrics .metric-card::before,body .academic-metrics .metric-card::after{display:none!important}
+body .academic-metrics strong{font:500 40px/1 var(--font-display);letter-spacing:-.05em;color:var(--blue)}
+body .academic-metrics span{font-size:11px;color:var(--muted)}
+body .academic-curve-card{grid-column:8/-1;grid-row:2;padding:24px;background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:none}
+body .academic-curve-card h3{font-size:19px;line-height:1.3}
+body .next-class-widget{grid-column:1/span 5;grid-row:3;padding:24px;background:var(--surface-soft);border:0;border-radius:20px;box-shadow:none}
+body .dashboard-widget-grid{grid-column:6/-1;grid-row:3;display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:0}
+body .dashboard-widget{padding:24px;border:1px solid var(--line);border-radius:20px;background:var(--surface);box-shadow:none}
+body .dashboard-widget h3,body .next-class-widget h3{font-size:20px;line-height:1.3;color:var(--ink)}
+body .dashboard-widget p,body .next-class-widget p{font-size:13px;color:var(--muted)}
+body .hero-panel .quick-row{grid-column:1/-1;grid-row:5;justify-content:flex-start;padding:0;gap:12px;border:0;margin:0}
+body .hero-panel .quick-row a{font-size:12px;border-radius:9px}
+body .home-most-used{grid-column:1/span 7;grid-row:6/span 2;padding:28px;border:1px solid var(--line);border-radius:22px;background:var(--surface);box-shadow:none}
+body .home-most-used h3{font-size:25px;font-weight:500}
+body .most-used-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+body .most-used-grid button{background:var(--surface-soft);border:0;border-radius:12px;padding:16px;text-align:left}
+body .most-used-grid button:hover{background:#e7ecf8;transform:translateY(-2px)}
+body .recent-materials-widget{grid-column:8/-1;grid-row:6}
+body .hero-panel>.home-dynamic:not(.recent-materials-widget){grid-column:8/-1;grid-row:7}
+body .home-dynamic{padding:24px;border:1px solid var(--line);border-radius:20px;background:var(--surface);box-shadow:none}
+body .home-dynamic h3{font-size:20px;margin:0 0 16px}
+body .mission-grid{grid-column:1/-1;grid-row:8;display:grid;grid-template-columns:1fr 1fr;gap:32px;border:0;margin-top:8px}
+body .mission-card{padding:24px 0;border:0;border-top:1px solid var(--line);border-radius:0;background:none;box-shadow:none}
+body .mission-card h3{font-size:19px}
+body .mission-card p{font-size:13px;line-height:1.9;color:var(--muted)}
+body .kit-card{grid-column:1/-1;grid-row:9;display:grid;grid-template-columns:1.6fr 1fr;gap:40px;align-items:center;background:linear-gradient(115deg,#eaf0fc,#f0f3f8);border:1px solid #d9e3f7;border-radius:26px;padding:34px;box-shadow:none}
+body .kit-card h2{font-size:36px;line-height:1.1;font-weight:500;color:var(--ink)}
+body .kit-card p{color:var(--muted);font-size:14px}
+body .kit-guide-card{background:#ffffff80;border:1px solid #ffffffb0;border-radius:16px;padding:24px;box-shadow:none}
+body .kit-guide-card strong{font-size:20px;line-height:1.5;color:var(--ink)}
+
+/* Career: one feature, two complementary stories and a compact wide module. */
+body #careerCardsContainer{display:grid;grid-template-columns:1.45fr 1fr;gap:22px;align-items:stretch}
+body #careerCardsContainer .career-card{display:flex;flex-direction:column;gap:16px;padding:28px;margin:0;min-height:0}
+body #careerCardsContainer .career-card:first-child{grid-row:span 2;background:radial-gradient(circle at 100% 0,#4565b635,transparent 60%),var(--deep);border-color:transparent;border-radius:24px 24px 64px 24px;justify-content:flex-start;padding:34px}
+body #careerCardsContainer .career-card:first-child :is(h3,p,.portal-card-icon){color:var(--on-deep)!important}
+body #careerCardsContainer .career-card:first-child h3{font-size:clamp(28px,3vw,42px);line-height:1.15;margin:12px 0}
+body #careerCardsContainer .career-card:first-child p{color:var(--on-deep-muted)!important;max-width:430px}
+body #careerCardsContainer .career-card .portal-card-icon{background:var(--surface-soft);color:var(--blue);border-radius:9px;box-shadow:none}
+body #careerCardsContainer .career-card:first-child .portal-card-icon{background:#ffffff14}
+body #careerCardsContainer .career-card h3{font-size:25px;margin:0}
+body #careerCardsContainer .career-card p{margin:0}
+body #careerCardsContainer .career-card .btn-secondary{margin-top:auto;align-self:flex-start}
+body #careerCardsContainer .career-card .btn-secondary::after{content:'';position:absolute;inset:0;border-radius:inherit}
+body #careerCardsContainer .career-card:nth-child(4){grid-column:1/-1;background:var(--surface-soft);border:0;display:grid;grid-template-columns:auto 1.3fr 1fr auto;align-items:center;border-radius:18px}
+body #careerCardsContainer .career-card:nth-child(4) .btn-secondary{margin:0}
+body .career-path-panel{margin-top:40px;border-radius:20px;box-shadow:none}
+
+/* Representatives: a deliberate 60:40 editorial hierarchy, no staggered gaps. */
+body #representantesContainer{display:grid;grid-template-columns:1.35fr 1fr;gap:22px;align-items:stretch}
+body .representative:nth-child(n){margin:0;min-width:0;grid-column:2;display:grid;grid-template-columns:auto 1fr;gap:10px 20px;align-content:start;padding:28px;background:var(--surface);border:1px solid var(--line);border-radius:20px;color:var(--ink)}
+body .representative .rep-top{grid-column:1/-1;display:flex;align-items:start;justify-content:space-between;gap:18px;color:var(--muted);font-size:10px}
+body .representative .rep-top .section-tag{font-size:13px;letter-spacing:.09em;color:var(--blue)}
+body .representative .rep-portrait{grid-column:1;grid-row:2/span 2;display:grid;place-items:center;width:64px;height:64px;margin:16px 0 0;border-radius:18px;background:var(--surface-soft);overflow:hidden}
+body .representative .rep-portrait span{font:500 26px/1 var(--font-display);letter-spacing:-.04em;color:#526b9a}
+body .representative .rep-portrait img{width:100%;height:100%;object-fit:cover}
+body .representative h3{grid-column:2;font-size:25px;line-height:1.2;font-weight:500;overflow-wrap:anywhere;margin:18px 0 0;color:var(--ink)}
+body .representative p{grid-column:2;margin:0;min-height:0;font-size:13px;line-height:1.75;color:var(--muted)}
+body .rep-link{grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:12px 0 0;padding-top:16px;border-top:1px solid var(--line);min-height:44px;color:var(--ink);font-size:12px}
+body .rep-link>span{margin-left:auto;font-size:24px;transition:transform var(--motion-normal) var(--motion-ease)}
+body .rep-link:hover>span{transform:translate(4px,-4px)}
+body .representative-lead:nth-child(n){grid-column:1;grid-row:1/span 2;display:flex;flex-direction:column;gap:14px;padding:34px;background:radial-gradient(circle at 95% 5%,#4266b638,transparent 60%),var(--deep);border-color:transparent;border-radius:26px 26px 64px 26px}
+body .representative-lead .rep-top .section-tag{font:500 clamp(26px,3vw,40px)/1.1 var(--font-display);letter-spacing:-.035em;text-transform:none;color:var(--on-deep)}
+body .representative-lead .rep-top{color:var(--on-deep-muted)}
+body .representative-lead .rep-portrait{height:88px;width:88px;background:#ffffff14;border:1px solid #ffffff20;margin:12px 0 2px;border-radius:22px}
+body .representative-lead .rep-portrait span{color:#c0d2fe;font-size:36px}
+body .representative-lead h3{font-size:clamp(30px,3.1vw,44px);line-height:1.12;color:var(--on-deep);margin:0}
+body .representative-lead p{max-width:380px;color:var(--on-deep-muted);font-size:14px}
+body .representative-lead .rep-link{margin-top:auto;border-color:#ffffff26;color:var(--on-deep)}
+body .representative:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+
+/* Academic tools, repository and information share the same visual language. */
+body .folder-card{border:1px solid var(--line);border-radius:16px;background:var(--surface);box-shadow:none;min-height:112px;padding:22px}
+body .folder-card:hover{border-color:#9aacd6;box-shadow:var(--shadow);transform:translateY(-3px)}
+body .folder-card:nth-child(n) .folder-visual{background:var(--surface-soft)!important;color:var(--blue)!important;box-shadow:none;border-radius:12px}
+body .folder-card .folder-title{font-size:19px;font-weight:600}
+body .folder-card .folder-meta{font-size:12px;color:var(--muted)}
+body .drive-sync-card{border-radius:12px;box-shadow:none;font-size:13px;padding:18px 20px}
+body .physical-books-card{border:1px solid var(--line);border-radius:18px;box-shadow:none;padding:24px}
+body .physical-books-card .empty-state{width:100%;max-width:none;min-height:0;margin-top:16px}
+body .tools-workspace{border:0;box-shadow:none;background:none;scroll-margin-top:132px}
+body .tools-tab-list{display:flex;flex-wrap:wrap;gap:10px;border-top:1px solid var(--line);padding-top:20px}
+body .tools-tab-button{display:flex;align-items:center;gap:9px;min-height:44px;padding:11px 15px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);box-shadow:none}
+body .tools-tab-button>span{display:grid;place-items:center;padding:0;background:none;border:0;width:20px;height:20px}
+body .tools-tab-button.active{background:var(--deep);color:var(--on-deep);border-color:var(--deep);box-shadow:none}
+body .tools-tab-button.active strong{color:var(--on-deep)}
+body .tools-tab-button strong{font-size:12px;color:inherit}
+body .tools-tab-button small{display:none}
+body .curriculum-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+body .cycle-progress-card{padding:24px}
+body .cycle-progress-card h3{font-size:22px}
+body .curriculum-subject{display:grid;grid-template-columns:minmax(0,1fr) 116px;align-items:center;gap:14px;min-height:64px;padding:10px 12px}
+body .curriculum-subject span{font-size:13px;line-height:1.5;overflow-wrap:anywhere}
+body .curriculum-subject select{width:116px;min-width:0;min-height:40px;font-size:12px;padding:8px;border-radius:8px}
+body .information-group{border:1px solid var(--line);border-radius:18px;box-shadow:none}
+body .syllabus-card,body .faq-item{border-color:var(--line);border-radius:14px;box-shadow:none}
+body .category-panel{border-color:var(--line);border-radius:18px;box-shadow:none}
+body .category-header{background:var(--surface-soft);color:var(--ink)}
+body .modal-card,body .app-modal,body .app-panel,body .services-panel{border-color:var(--line);background:var(--surface);color:var(--ink)}
+body .modal-card{border-radius:22px;box-shadow:0 24px 85px #17283e26}
+body .modal-backdrop,body .admin-backdrop{background:#10233d70;backdrop-filter:blur(4px)}
+body .modal,body .admin-panel{z-index:1800}
+body .toast{border-radius:14px;box-shadow:0 12px 35px #192d521b}
+
+/* Administration: restrained hierarchy; content, forms and actions remain primary. */
+body .admin-box{z-index:1801;width:min(1320px,96vw);height:92dvh;max-height:92dvh;display:grid;grid-template-columns:215px minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);padding:0;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--paper)}
+body .admin-header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 20px;padding:22px 28px;background:var(--surface);color:var(--ink)!important;border-bottom:1px solid var(--line)}
+body .admin-header h2{font-size:27px;font-weight:500;line-height:1.25;margin:7px 0 0;color:var(--ink)!important}
+body .admin-header #publishStatus{flex-basis:100%;font-size:11px;color:var(--muted)}
+body .admin-tabs{grid-column:1;display:flex;flex-direction:column;gap:4px;margin:0;padding:20px 12px;background:var(--surface);border:0;border-right:1px solid var(--line);border-radius:0;overflow-y:auto}
+body .admin-tabs button{display:flex;align-items:center;gap:11px;min-height:42px;padding:11px 14px;border:0;border-radius:9px;text-align:left;white-space:normal;background:none;color:var(--muted);font-size:12px;box-shadow:none}
+body .admin-tabs button .ui-icon{width:18px;height:18px}
+body .admin-tabs button.active{background:var(--surface-soft);color:var(--blue);font-weight:700;box-shadow:none}
+body .admin-tabs button:hover{background:var(--surface-soft);color:var(--ink)}
+body .admin-content{min-width:0;padding:28px;overflow-y:auto}
+body .admin-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px;margin-bottom:22px;box-shadow:none}
+body .admin-card h3{font-size:27px;line-height:1.2;font-weight:500}
+body .admin-card p{font-size:13px;color:var(--muted);line-height:1.8}
+body .admin-overview{background:none;border:0;padding:0}
+body .admin-overview .metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+body .admin-overview .metric-card{padding:20px;background:var(--surface);border:1px solid var(--line);border-radius:14px;text-align:left;box-shadow:none;min-height:114px}
+body .admin-overview .metric-card strong{font:500 38px/1 var(--font-display);letter-spacing:-.045em;color:var(--blue)}
+body .admin-overview .metric-card span{font-size:12px;line-height:1.6;color:var(--muted)}
+body .admin-overview .metric-card:first-child{grid-column:span 2;grid-row:span 2;background:radial-gradient(circle at 90% 0,#4564b648,transparent 60%),var(--deep);border-color:transparent;display:flex;flex-direction:column;justify-content:space-between;gap:30px;border-radius:18px 18px 42px 18px}
+body .admin-overview .metric-card:first-child strong{font-size:76px;color:var(--on-deep)}
+body .admin-overview .metric-card:first-child span{font-size:16px;color:var(--on-deep-muted)}
+body .admin-overview .metric-card::after,body .admin-overview .metric-card::before{display:none!important}
+body .admin-overview .metric-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+body .admin-list>div{border-bottom:1px solid var(--line);padding:16px 0;gap:16px}
+body .admin-list strong{font-size:14px;color:var(--ink)}
+body .admin-list p{font-size:12px}
+body .admin-form-grid,body .portal-form-grid{gap:20px}
+body .section-switches{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:20px 0}
+body .section-switches label{display:flex;align-items:center;gap:9px;font-size:12px}
+
+/* Footer: a compact editorial ending and permanent institutional credits. */
+body .site-footer{background:#edf1f7!important;color:var(--ink);border-top:1px solid var(--line)!important;padding:0!important}
+body .site-footer::before{display:none!important}
+.footer-editorial{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;width:min(1280px,90%);margin:auto;padding:28px 0;border-bottom:1px solid #d5dde9}
+.footer-editorial>span{grid-column:1/-1;font-size:9px;font-weight:800;letter-spacing:.13em;color:var(--muted)}
+.footer-editorial p{font:500 clamp(22px,2.8vw,36px)/1.2 var(--font-display)!important;letter-spacing:-.035em;color:var(--ink);margin:0}
+.footer-editorial>a{display:flex;align-items:center;gap:18px;font-size:12px;color:var(--ink);min-height:44px}
+.footer-editorial>a span{font-size:24px}
+body .footer-inner{display:grid;grid-template-columns:1.8fr 1fr 1fr;width:min(1280px,90%);max-width:1280px;padding:28px 0!important;gap:32px}
+body .footer-brand-row{gap:14px}
+body .footer-col :is(h3,p,a,button),body .footer-brand-row>span{color:var(--ink)!important}
+body .footer-col h3{font-size:11px;letter-spacing:.02em}
+body .footer-col p{font-size:12px;color:var(--muted)!important;line-height:1.8;max-width:420px;margin-top:14px}
+body .footer-brand-row>span{font-size:12px}
+body .footer-links{gap:2px}
+body .footer-links a,body .footer-links button{min-height:34px;font-size:12px;padding:4px 0;background:none;border:0}
+body .footer-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;background:none;border-top:1px solid #d5dde9;color:var(--muted);padding:16px 5%;font-size:10px}
+body .footer-bottom strong{color:var(--ink)}
+
+/* Dark mode: the same composition with deliberately paired surfaces. */
+body.dark-mode{--paper:#101b2d;--surface:#18263c;--surface-soft:#22334d;--ink:#edf2fd;--muted:#b5c3d9;--blue:#a5bafd;--line:#34445e;--deep:#203656;background:var(--paper)}
+body.dark-mode .site-nav{background:#18263cf0}
+body.dark-mode .btn-primary{background:#405ad2;border-color:#405ad2;color:#fff}
+body.dark-mode .hero-section{background:radial-gradient(ellipse at 15% 20%,#253b5940,transparent 55%),var(--paper)}
+body.dark-mode .hero-art{background:radial-gradient(circle at 55% 35%,#4866b052,transparent 55%),#152a4b}
+body.dark-mode .kit-card{background:linear-gradient(115deg,#263954,#1b2c44);border-color:var(--line)}
+body.dark-mode .kit-guide-card{background:#ffffff08;border-color:#ffffff14}
+body.dark-mode .kit-card :is(h2,strong,p){color:var(--ink)}
+body.dark-mode .most-used-grid button:hover{background:#2a3e5c}
+body.dark-mode .site-footer{background:#192b43!important}
+body.dark-mode .footer-editorial,body.dark-mode .footer-bottom{border-color:var(--line)}
+body.dark-mode .section-tag,body.dark-mode .eyebrow{background:none!important;border:0!important;color:var(--blue)!important}
+body.dark-mode .metric-card{background:var(--surface)!important;border-color:var(--line)!important}
+body.dark-mode .metric-card strong{background:none!important;border:0!important;box-shadow:none!important;color:var(--blue)!important}
+body.dark-mode .admin-tabs button{background:none!important;color:var(--ink)!important}
+body.dark-mode .admin-tabs button.active{background:var(--surface-soft)!important;color:var(--blue)!important}
+body.dark-mode .admin-overview .metric-card:first-child{background:#22395b!important}
+body.dark-mode .admin-overview .metric-grid{border:0;background:none}
+
+/* Motion is progressive enhancement. Content never depends on animation. */
+body[data-motion=enhanced] .reveal-ready{opacity:0;transform:translateY(14px);transition:opacity .55s var(--motion-ease),transform .55s var(--motion-ease);transition-delay:var(--reveal-delay,0ms)}
+body[data-motion=enhanced] .reveal-ready.revealed{opacity:1;transform:translateY(0)}
+@media(prefers-reduced-motion:no-preference){
+body[data-motion=enhanced] .page-section.active .section-header{animation:section-arrive .4s var(--motion-ease) both}
+@keyframes section-arrive{from{opacity:.3;transform:translateY(7px)}to{opacity:1;transform:none}}
+@keyframes mark-arrive{from{opacity:0;transform:translateY(12px) rotate(0)}to{opacity:1;transform:translateY(0) rotate(-4deg)}}
+}
+@media(hover:hover) and (pointer:fine){
+body .hero-actions .btn-primary>span{transition:transform .4s var(--motion-ease)}
+body .hero-actions .btn-primary:hover>span{transform:translate(3px,-3px)}
+}
+@media(prefers-reduced-motion:reduce){
+*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+body .reveal-ready{opacity:1!important;transform:none!important}
+}
+body[data-motion=minimal] .reveal-ready{opacity:1;transform:none}
+body[data-motion=minimal] *,body[data-motion=minimal] *::before,body[data-motion=minimal] *::after{animation:none!important;scroll-behavior:auto!important}
+
+/* Tablet and mobile are recomposed, not scaled-down desktop screenshots. */
+@media(min-width:1025px) and (max-width:1380px){
+body .site-nav .nav-inner{flex-wrap:wrap;gap:8px}
+body .site-nav .nav-logo{margin-right:auto}
+body .site-nav .nav-links{order:2;flex:1 1 100%;width:100%;justify-content:center}
+}
+@media(max-width:1100px){
+body .hero-art{padding:22px}
+body .admin-overview .metric-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+body .admin-overview .metric-card:first-child{grid-column:span 2;grid-row:auto}
+body .nav-logo{min-width:164px}
+body #careerCardsContainer .career-card:nth-child(4){grid-template-columns:auto 1fr}
+body #careerCardsContainer .career-card:nth-child(4) p{grid-column:2}
+body #careerCardsContainer .career-card:nth-child(4) .btn-secondary{grid-column:2}
+}
+@media(max-width:1024px){
+body .site-nav{width:calc(100% - 24px);top:10px;border-radius:14px}
+body .site-nav .nav-inner{min-height:64px;padding:9px 0;gap:10px}
+body .site-nav .nav-links.open{position:absolute!important;inset:calc(100% + 8px) 0 auto!important;max-height:calc(100dvh - 112px);padding:14px;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 45px #192d521c}
+body .site-nav .nav-links.open::before,body .site-nav .nav-links.open::after{display:none!important}
+body .site-nav .nav-links.open{overflow-x:hidden}
+body .nav-links>a,body .nav-menu-toggle{font-size:14px;min-height:46px}
+body.admin-active .site-nav{top:52px}
+}
+/* Between the phone bar and desktop navigation, retain the essential actions. */
+@media(min-width:761px) and (max-width:1024px){
+body .nav-inner > .nav-icon-button{display:grid!important}
+body .nav-inner > #servicesOpenButton{display:inline-flex!important;align-items:center;justify-content:center}
+}
+@media(max-width:900px){
+body .hero-editorial-copy>p{font-size:13px}
+body .hero-art{aspect-ratio:1/1.25;padding:20px;border-radius:22px 22px 50px 22px}
+body .academic-strip{grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:42px}
+body .academic-strip>span{grid-column:1/-1;padding:18px 0;border-bottom:1px solid var(--line)}
+body .academic-strip a:first-of-type{border-left:0}
+body .hero-section .hero-wrap{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px!important}
+body .hero-intro>*,body .hero-panel>*,body .hero-wrap>.kit-card{grid-column:1/-1;grid-row:auto}
+body .semester-widget{order:1}
+body .academic-metrics{order:2;grid-template-columns:repeat(4,minmax(0,1fr))}
+body .academic-curve-card{order:3}
+body .next-class-widget{order:4;grid-column:1}
+body .dashboard-widget-grid{order:5;grid-column:2;grid-template-columns:1fr;gap:16px}
+body .hero-panel .quick-row{order:7;grid-row:auto;grid-column:1/-1}
+body .home-most-used{order:8}
+body .recent-materials-widget{order:9}
+body .hero-panel>.home-dynamic:not(.recent-materials-widget){order:10;grid-row:auto;grid-column:1/-1}
+body .mission-grid{order:11}
+body .kit-card{order:12;gap:24px;padding:28px}
+body .kit-card h2{font-size:30px}
+body #representantesContainer{grid-template-columns:1.2fr 1fr;gap:18px}
+body .representative:nth-child(n){padding:22px;gap:10px 14px}
+body .representative h3{font-size:21px}
+body .representative .rep-portrait{width:48px;height:48px;border-radius:13px}
+body .representative-lead:nth-child(n){padding:28px}
+body .representative-lead .rep-portrait{width:76px;height:76px}
+body .representative-lead h3{font-size:31px}
+body .admin-box{grid-template-columns:176px minmax(0,1fr)}
+body .admin-content{padding:20px}
+body .admin-overview .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:620px){
+body .section-wrap{width:90%;padding:36px 0}
+body .section-header{margin-bottom:28px}
+body .section-header h2{font-size:clamp(32px,8.3vw,46px)}
+body .section-header p{font-size:14px}
+body .site-nav .nav-inner{gap:6px;flex-wrap:nowrap}
+body .nav-logo{min-width:0;gap:8px;margin-right:auto}
+body .nav-brand-image{width:38px;height:38px}
+body .wordmark{font-size:16px}
+body .wordmark small{font-size:6px}
+body .hero-editorial-copy{padding:0}
+body .hero-editorial-copy>p{font-size:14px;line-height:1.85;margin-bottom:24px}
+body .hero-actions{margin-bottom:22px}
+body .hero-actions .btn-primary{width:auto}
+body .hero-art{aspect-ratio:auto;min-height:310px;gap:12px;padding:22px;border-radius:22px 22px 54px 22px}
+body .academic-strip{margin-bottom:38px}
+body .academic-strip a{font-size:12px;padding:17px 10px}
+body .dashboard-heading{grid-template-columns:1fr;gap:16px;margin-bottom:24px}
+body .dashboard-heading h2{font-size:36px}
+body .dashboard-heading p{justify-self:start;max-width:none;font-size:13px}
+body .hero-section .hero-wrap{grid-template-columns:1fr;padding-bottom:40px;gap:18px!important}
+body .hero-intro>*,body .hero-panel>*,body .hero-wrap>.kit-card,body .next-class-widget,body .dashboard-widget-grid{grid-column:1/-1;grid-row:auto}
+body .academic-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px!important}
+body .academic-metrics .metric-card{min-height:100px;padding:18px}
+body .academic-metrics strong{font-size:36px}
+body .semester-widget,body .academic-curve-card,body .home-most-used{padding:22px;border-radius:18px}
+body .semester-widget .semester-head h2{font-size:26px}
+body .dashboard-widget-grid{grid-template-columns:1fr 1fr;gap:12px}
+body .dashboard-widget{padding:18px}
+body .dashboard-widget h3{font-size:18px}
+body .dashboard-widget .btn-secondary{font-size:11px;padding:10px}
+body .most-used-grid{grid-template-columns:1fr 1fr}
+body .mission-grid{grid-template-columns:1fr;gap:0}
+body .mission-card{padding:22px 0}
+body .kit-card{grid-template-columns:1fr;padding:24px;border-radius:20px}
+body .kit-guide-card{padding:20px}
+body #careerCardsContainer{grid-template-columns:1fr;gap:18px}
+body #careerCardsContainer .career-card:first-child{grid-row:auto;padding:28px}
+body #careerCardsContainer .career-card:first-child h3{font-size:32px}
+body #careerCardsContainer .career-card:nth-child(4){grid-column:auto;display:flex;align-items:flex-start}
+body #representantesContainer{grid-template-columns:1fr;gap:18px}
+body .representative:nth-child(n){grid-column:1;grid-row:auto;padding:24px}
+body .representative-lead:nth-child(n){grid-column:1;grid-row:auto;padding:28px;gap:16px}
+body .representative-lead .rep-top .section-tag{font-size:34px}
+body .representative-lead h3{font-size:34px}
+body .representative-lead .rep-link{margin-top:10px}
+body .representative h3{font-size:23px}
+body .representative .rep-portrait{width:54px;height:54px}
+body .representative-lead .rep-portrait{width:74px;height:74px}
+body .curriculum-grid{grid-template-columns:1fr}
+body .cycle-progress-card{padding:18px}
+body .tools-tab-list{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding-bottom:10px}
+body .tools-tab-button{flex-shrink:0}
+body .admin-box{height:100dvh;max-height:100dvh;border-radius:0;grid-template-columns:1fr;grid-template-rows:auto auto minmax(0,1fr)}
+body .admin-header{padding:16px;gap:8px}
+body .admin-header h2{font-size:23px}
+body .admin-header .btn-primary{min-height:40px;font-size:12px;padding:10px 14px}
+body .admin-tabs{grid-column:1;flex-direction:row;overflow-x:auto;overflow-y:hidden;padding:8px;border-right:0;border-bottom:1px solid var(--line)}
+body .admin-tabs button{flex-shrink:0;white-space:nowrap;font-size:11px;gap:7px;min-height:40px}
+body .admin-tabs button .ui-icon{width:16px;height:16px}
+body .admin-content{padding:16px}
+body .admin-card{padding:20px}
+body .admin-overview{padding:0}
+body .admin-card h3{font-size:24px}
+body .admin-overview .metric-grid{grid-template-columns:1fr 1fr;gap:12px}
+body .admin-overview .metric-card:first-child{grid-column:1/-1;grid-row:auto;min-height:180px;gap:16px}
+body .admin-overview .metric-card:first-child strong{font-size:64px}
+body .admin-overview .metric-card{padding:18px}
+body .admin-form-grid{grid-template-columns:1fr}
+body .admin-list>div{flex-wrap:wrap}
+body .admin-list input,body .admin-list select{max-width:100%;min-width:0}
+body .section-switches{grid-template-columns:1fr 1fr}
+.footer-editorial{padding:25px 0;gap:16px;grid-template-columns:1fr}
+.footer-editorial>span{grid-column:auto}
+.footer-editorial p{font-size:28px;max-width:300px}
+.footer-editorial>a{justify-self:start;min-height:36px}
+body .footer-inner{grid-template-columns:1fr 1fr;gap:24px}
+body .footer-col:first-child{grid-column:1/-1}
+body .footer-bottom{flex-direction:column;gap:8px;font-size:10px}
+}
+@media(max-width:760px){
+body .mobile-bottom-nav{grid-template-columns:repeat(5,minmax(0,1fr));left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));padding:8px 5px;border:1px solid var(--line);border-radius:16px;background:var(--surface);box-shadow:0 6px 30px #17283e12;backdrop-filter:none}
+body .mobile-bottom-nav a,body .mobile-bottom-nav button{display:flex;flex-direction:column;gap:5px;min-width:0;min-height:48px;padding:4px 0;background:none;color:var(--muted);font-size:10px;line-height:1.2;white-space:nowrap;overflow-wrap:normal;border-radius:9px}
+body .mobile-bottom-nav .ui-icon{width:19px;height:19px}
+body .mobile-bottom-nav a.active{background:var(--surface-soft);color:var(--blue)}
+body .mobile-bottom-nav a.active::before,body .mobile-bottom-nav a.active::after{display:none!important}
+body .footer-bottom{padding-bottom:calc(92px + env(safe-area-inset-bottom))}
+body .back-to-top{bottom:96px}
+body.dialog-active .mobile-bottom-nav{display:none!important}
+}
+@media(max-width:360px){
+body .wordmark small{display:none}
+body .hero-actions .btn-primary{width:100%}
+body .dashboard-widget-grid{grid-template-columns:1fr}
+body .curriculum-subject{grid-template-columns:minmax(0,1fr) 100px;gap:8px}
+body .curriculum-subject select{width:100px}
+}
+
+/* La referencia original conserva dos columnas independientes, sin scroll interno. */
+@media(min-width:1025px){
+body.dark-mode .site-nav .nav-links{background:none!important}
+}
+@media(max-width:620px){
+body .hero-actions{gap:20px}
+body .hero-actions .btn-primary{font-size:12px;padding:12px 14px;flex:none}
+}
+@media(max-width:360px){
+body .hero-actions{flex-direction:column;align-items:stretch}
+}
+
+/* Barra fija: altura reservada, sin desplazamientos al recorrer la página. */
+body #profilePanel,body #servicesPanel{z-index:1400!important;top:0;height:100dvh;max-height:100dvh;overflow-y:auto}
+body #profileBackdrop,body #servicesBackdrop{z-index:1399!important}
+body .services-panel .services-panel-header{padding-right:0;align-items:flex-start}
+body .services-panel .services-close{flex-shrink:0;min-width:42px;min-height:42px}
+body .admin-box{min-width:0}
+body .site-nav{position:fixed;top:0;left:0;right:0;width:100%;margin:0;border-width:0 0 1px;border-radius:0}
+body .site-nav .nav-inner{width:min(1440px,calc(100% - 40px))}
+body main{padding-top:88px!important}
+body.admin-active main{padding-top:130px!important}
+body .admin-mode-bar{position:fixed;top:0;left:0;right:0;height:42px;min-height:42px;z-index:101}
+body.admin-active .site-nav{top:42px}
+body .admin-mode-bar button{background:var(--surface);color:var(--ink)!important;border:1px solid var(--line)}
+@media(min-width:1025px) and (max-width:1380px){
+body main{padding-top:140px!important}
+body.admin-active main{padding-top:182px!important}
+}
+@media(max-width:1024px){
+body .site-nav .nav-inner{width:calc(100% - 28px)}
+body main{padding-top:80px!important}
+body.admin-active main{padding-top:122px!important}
+body .site-nav .nav-links.open{left:12px!important;right:12px!important}
+}
+@media(max-width:620px){
+body .admin-box{width:100%;max-width:100%}
+body .admin-header .btn-primary{width:auto;flex:none}
+}
+
+/* Contenido institucional visible y continuo, en lugar del panel flotante. */
+body #herramientas .tools-tab-list{display:flex!important;flex-wrap:wrap;gap:10px}
+body #herramientas .tools-tab-button{display:flex!important;width:auto;min-height:44px!important;flex-shrink:0}
+body #herramientas .tools-tab-button strong{font-size:12px!important}
+@media(max-width:620px){
+body #herramientas .tools-tab-list{flex-wrap:nowrap;overflow-x:auto;width:100%;padding-bottom:10px}
+body #herramientas .tools-tab-button{width:auto!important}
+}
+
+/* Los colores de C1–C8 se aplican únicamente en el repositorio. */
+body #repositoryView .folder-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+body #repositoryView .folder-card[data-cycle-id]{--cycle-surface:#edf2fc;--cycle-ink:#314775;background:var(--cycle-surface)!important;border-color:#dce4f0;color:var(--cycle-ink)}
+body #repositoryView .folder-card[data-cycle-index="2"]{--cycle-surface:#edf6f2;--cycle-ink:#326554}
+body #repositoryView .folder-card[data-cycle-index="3"]{--cycle-surface:#f2effb;--cycle-ink:#625283}
+body #repositoryView .folder-card[data-cycle-index="4"]{--cycle-surface:#f9f3e9;--cycle-ink:#76603c}
+body #repositoryView .folder-card[data-cycle-index="5"]{--cycle-surface:#edf5f9;--cycle-ink:#3a6277}
+body #repositoryView .folder-card[data-cycle-index="6"]{--cycle-surface:#f8efef;--cycle-ink:#805252}
+body #repositoryView .folder-card[data-cycle-index="7"]{--cycle-surface:#eff3e9;--cycle-ink:#55663d}
+body #repositoryView .folder-card[data-cycle-index="8"]{--cycle-surface:#f1f1f8;--cycle-ink:#535781}
+body #repositoryView .folder-card[data-cycle-id] .folder-visual{background:#ffffffb0!important;color:var(--cycle-ink)!important}
+body #repositoryView .folder-card[data-cycle-id] .folder-title{color:var(--cycle-ink)!important}
+body.dark-mode #repositoryView .folder-card[data-cycle-id]{--cycle-surface:#243650;--cycle-ink:#c2d0f4}
+body.dark-mode #repositoryView .folder-card:is([data-cycle-index="2"],[data-cycle-index="7"]){--cycle-surface:#233c36;--cycle-ink:#b2d6c5}
+body.dark-mode #repositoryView .folder-card:is([data-cycle-index="3"],[data-cycle-index="8"]){--cycle-surface:#34314d;--cycle-ink:#cfbfec}
+body.dark-mode #repositoryView .folder-card:is([data-cycle-index="4"],[data-cycle-index="6"]){--cycle-surface:#423738;--cycle-ink:#e4c4b9}
+body.dark-mode #repositoryView .folder-card[data-cycle-id] .folder-visual{background:#ffffff0c!important}
+@media(max-width:900px){
+body #repositoryView .folder-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+body #repositoryView .favorites-folder{grid-column:1/-1}
+}
+@media(max-width:620px){
+body #repositoryView .folder-grid{grid-template-columns:1fr!important}
+body #repositoryView .favorites-folder{grid-column:auto}
+}
+
+/* Acabado profesional: profundidad, respuesta al cursor y movimiento con intención.
+ * Solo se animan transform y opacity; el contenido nunca depende de la animación. */
+:root{--shadow-sm:0 1px 2px #17283e0a,0 2px 6px #17283e08;--shadow-md:0 2px 4px #17283e08,0 10px 24px -6px #1a2c5024;--shadow-lg:0 4px 8px #17283e0a,0 22px 44px -12px #1a2c5033;--spring:cubic-bezier(.34,1.4,.5,1);--grad-primary:linear-gradient(110deg,#2f47c0 0%,#3b57d9 45%,#6f86ec 52%,#3b57d9 59%,#2f47c0 100%)}
+body.dark-mode{--shadow-sm:0 1px 2px #0006;--shadow-md:0 2px 6px #0005,0 12px 28px -8px #000a;--shadow-lg:0 6px 12px #0005,0 24px 48px -14px #000c}
+body{background-image:radial-gradient(1100px 520px at 100% -8%,#dfe6fb66,transparent 62%),radial-gradient(900px 480px at -10% 30%,#e9edf880,transparent 60%);background-repeat:no-repeat}
+body.dark-mode{background-image:radial-gradient(1100px 520px at 100% -8%,#2a3f6a40,transparent 62%)}
+::selection{background:#c6d4fa;color:#17283e}
+
+/* Barra de progreso de lectura (sin JavaScript, navegadores con scroll-timeline). */
+@supports (animation-timeline:scroll()){
+body::after{content:'';position:fixed;inset:0 0 auto;height:3px;z-index:1000;pointer-events:none;background:linear-gradient(90deg,#334dc5,#7c93ef);transform-origin:0 50%;transform:scaleX(0);animation:read-progress linear both;animation-timeline:scroll(root)}
+@keyframes read-progress{to{transform:scaleX(1)}}
+}
+
+/* Navegación: gana profundidad al desplazarse. */
+body .site-nav{transition:box-shadow .35s var(--motion-ease),background-color .35s,border-color .35s,top .35s var(--motion-ease)}
+body.is-scrolled .site-nav{background:#ffffffe6;border-color:#d5dde9;box-shadow:0 10px 30px -10px #1a2c502e;backdrop-filter:blur(14px) saturate(1.4)}
+body.dark-mode.is-scrolled .site-nav{background:#18263ce6;border-color:var(--line)}
+body .nav-links>a,body .nav-menu-toggle{position:relative;border-radius:9px;transition:color var(--motion-fast),background-color var(--motion-fast)}
+body .nav-links>a:not(.active):hover,body .nav-menu-toggle:not(.active):hover{background:var(--surface-soft);color:var(--blue)}
+body .nav-dropdown{transform-origin:50% 0}
+
+/* Botones: degradado con brillo que recorre la superficie y respuesta táctil. */
+body .btn-primary{background:var(--grad-primary);background-size:250% 100%;background-position:100% 0;border-color:transparent;box-shadow:inset 0 1px 0 #ffffff2e,0 1px 2px #1a2c5033,0 6px 16px -6px #334dc58c;transition:background-position .7s var(--motion-ease),box-shadow .3s,transform .35s var(--spring)}
+body .btn-primary:hover{background:var(--grad-primary);background-size:250% 100%;background-position:0 0;box-shadow:inset 0 1px 0 #ffffff38,0 2px 4px #1a2c5033,0 14px 28px -10px #334dc5b3;transform:translateY(-2px)}
+body .btn-secondary,body .btn-ghost{box-shadow:var(--shadow-sm);transition:color var(--motion-fast),border-color var(--motion-fast),box-shadow .3s,transform .35s var(--spring)}
+body .btn-secondary:hover,body .btn-ghost:hover{box-shadow:var(--shadow-md)}
+body :is(.btn-primary,.btn-secondary,.btn-ghost,.hero-quick-chips button,.most-used-grid button):active{transform:translateY(0) scale(.97);transition-duration:.08s}
+body.dark-mode .btn-primary{background:linear-gradient(110deg,#3e58d0 0%,#4c66e0 45%,#8096f0 52%,#4c66e0 59%,#3e58d0 100%);background-size:250% 100%}
+body input:not([type=checkbox]):not([type=radio]),body select,body textarea{transition:border-color var(--motion-fast),box-shadow var(--motion-fast)}
+body input:not([type=checkbox]):not([type=radio]):focus,body select:focus,body textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px #334dc51f;outline:none}
+
+/* Tarjetas: elevación suave y luz que sigue al cursor. */
+body :is(.metric-card,.dashboard-widget,.career-card,.representative,.kit-guide-card,.economic-item,.hero-institutional-facts article,.portal-card,.home-dynamic,.home-most-used,.semester-widget,.academic-curve-card,.hero-clock-widget,.economic-widget,.economic-news-widget,.tool-card){transition:transform .45s var(--motion-ease),box-shadow .45s var(--motion-ease),border-color .3s,background-color .3s}
+@media(hover:hover) and (pointer:fine){
+body :is(.metric-card,.dashboard-widget,.career-card,.representative,.kit-guide-card,.hero-institutional-facts article,.portal-card,.tool-card):hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)!important;border-color:#b7c5e6!important}
+body :is(.home-dynamic,.home-most-used,.semester-widget,.academic-curve-card,.hero-clock-widget,.economic-widget,.economic-news-widget):hover{box-shadow:var(--shadow-md)!important}
+body .most-used-grid button:hover,body .economic-item:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+body.dark-mode :is(.metric-card,.dashboard-widget,.career-card,.representative,.kit-guide-card,.hero-institutional-facts article,.portal-card,.tool-card):hover{border-color:#4d6286!important}
+body[data-motion=enhanced] .spot:hover{background-image:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),#334dc514,transparent 45%)!important}
+body.dark-mode[data-motion=enhanced] .spot:hover{background-image:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),#a5bafd1a,transparent 45%)!important}
+}
+
+/* Movimiento: entrada al cambiar de sección y aparición progresiva. */
+body[data-motion=enhanced] .reveal-ready{opacity:0;transform:translateY(22px) scale(.985);transition:opacity .7s var(--motion-ease),transform .8s var(--motion-ease);transition-delay:var(--reveal-delay,0ms)}
+body[data-motion=enhanced] .reveal-ready.revealed{opacity:1;transform:none}
+@media(prefers-reduced-motion:no-preference){
+body[data-motion=enhanced] .page-section.active>*{animation:section-in .6s var(--motion-ease) backwards}
+body[data-motion=enhanced] .page-section.active .section-header>*{animation:rise-in .7s var(--motion-ease) backwards}
+body[data-motion=enhanced] .page-section.active .section-header>:nth-child(2){animation-delay:.06s}
+body[data-motion=enhanced] .page-section.active .section-header>:nth-child(3){animation-delay:.12s}
+body[data-motion=enhanced] .nav-group:is(:hover,:focus-within,.open) .nav-dropdown{animation:drop-in .28s var(--motion-ease) backwards}
+@keyframes section-in{from{opacity:0}}
+@keyframes rise-in{from{opacity:0;transform:translateY(16px)}}
+@keyframes drop-in{from{opacity:0;transform:translateY(-6px) scale(.98)}}
+}
+
+/* Consultas: formulario formal y panel institucional de contacto. */
+#consultas .section-header{max-width:760px}
+#consultas .contact-layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,1fr);gap:28px;align-items:start}
+#consultas .contact-form{position:relative;padding:36px 36px 30px;background:var(--surface);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow-md);overflow:hidden}
+#consultas .contact-form::before{content:'';position:absolute;inset:0 0 auto;height:4px;background:linear-gradient(90deg,var(--deep),var(--blue) 55%,#7c93ef)}
+#consultas .contact-kicker{display:block;color:var(--blue);font:800 10px/1.5 var(--font-body);letter-spacing:.16em;text-transform:uppercase}
+#consultas .contact-form-head{padding-bottom:22px;margin-bottom:26px;border-bottom:1px solid var(--line)}
+#consultas .contact-form-head h3{margin:8px 0 6px;font-size:28px;font-weight:500;line-height:1.2;color:var(--ink)}
+#consultas .contact-form-head p{margin:0;font-size:13px;color:var(--muted)}
+#consultas .portal-form-grid{gap:20px 18px}
+#consultas .portal-form-grid label>span,#consultas .contact-phone label>span{display:block;margin-bottom:8px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+#consultas :is(input,select,textarea){width:100%;min-height:50px;padding:12px 15px;border:1px solid #cfd8e6;border-radius:12px;background:var(--paper);font-size:14px}
+#consultas :is(input,select,textarea):hover{border-color:#aebcd6}
+#consultas :is(input,select,textarea):focus{background:var(--surface)}
+#consultas textarea{min-height:150px;resize:vertical;line-height:1.7}
+#consultas .contact-phone{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,.85fr);gap:20px;align-items:center;margin-top:26px;padding:20px 22px;border:1px solid #d6e0f4;border-radius:16px;background:linear-gradient(120deg,#eef3fe,#f6f8fc)}
+#consultas .contact-phone-copy strong{display:block;font:600 16px/1.35 var(--font-display);color:var(--deep);letter-spacing:-.02em}
+#consultas .contact-phone-copy p{margin:6px 0 0;font-size:13px;line-height:1.6;color:var(--muted)}
+#consultas .contact-phone input{background:var(--surface);font-size:16px;letter-spacing:.04em}
+#consultas .contact-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 20px;margin-top:26px}
+#consultas .contact-actions .btn-primary{min-width:210px;min-height:52px;font-size:14px;border-radius:12px}
+#consultas .contact-privacy{margin:0;font-size:12px;color:var(--muted)}
+#consultas .contact-aside{display:grid;gap:18px;position:sticky;top:110px}
+#consultas .contact-card{position:relative;padding:30px;border-radius:24px;color:var(--on-deep);background:radial-gradient(circle at 100% 0,#4565b65c,transparent 60%),var(--deep);box-shadow:var(--shadow-lg);overflow:hidden}
+#consultas .contact-card .contact-kicker{color:#aebef0}
+#consultas .contact-card h3{margin:8px 0 22px;font-size:24px;font-weight:500;color:var(--on-deep)}
+#consultas .contact-points{display:grid;gap:16px;margin:0;padding:0;list-style:none}
+#consultas .contact-points li{display:flex;gap:14px;align-items:flex-start;padding-top:16px;border-top:1px solid #ffffff1f}
+#consultas .contact-icon{display:grid;place-items:center;flex:none;width:38px;height:38px;border-radius:11px;background:#ffffff14;border:1px solid #ffffff22;font-size:16px;color:#dfe7ff}
+#consultas .contact-points small{display:block;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--on-deep-muted)}
+#consultas .contact-points :is(a,strong){display:block;margin-top:3px;font-size:14px;font-weight:600;color:var(--on-deep);text-decoration:none;word-break:break-word}
+#consultas .contact-points a:hover{text-decoration:underline;text-underline-offset:3px}
+#consultas .faq-list{display:grid;gap:14px}
+#consultas .faq-item{padding:20px 22px;border-radius:16px;background:var(--surface)}
+#consultas .faq-item h3{font-size:16px;margin:0 0 6px;color:var(--ink)}
+#consultas .faq-item p{font-size:13px;line-height:1.7}
+#consultas .field-error{margin-top:6px;font-size:12px}
+body.dark-mode #consultas .contact-form{background:var(--surface);border-color:var(--line)}
+body.dark-mode #consultas :is(input,select,textarea){background:#14223a;border-color:var(--line);color:var(--ink)}
+body.dark-mode #consultas .contact-phone{background:linear-gradient(120deg,#203352,#1b2b45);border-color:var(--line)}
+body.dark-mode #consultas .contact-phone-copy strong{color:var(--ink)}
+body.dark-mode #consultas .contact-card{background:radial-gradient(circle at 100% 0,#4565b640,transparent 60%),#0f1a2c;border:1px solid var(--line)}
+@media(max-width:1024px){
+#consultas .contact-layout{grid-template-columns:1fr}
+#consultas .contact-aside{position:static}
+}
+@media(max-width:620px){
+#consultas .contact-form{padding:26px 20px 22px;border-radius:20px}
+#consultas .contact-form-head h3{font-size:24px}
+#consultas .contact-phone{grid-template-columns:1fr;padding:18px}
+#consultas .contact-actions .btn-primary{width:100%}
+#consultas .contact-card{padding:24px}
+}
+/* Keep the theme control compact; the complete action remains available to assistive technology. */
+body #darkModeToggle{width:44px;min-width:44px;padding:10px;display:grid;place-items:center}
+body #darkModeToggle>span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+body .tool-panel{scroll-margin-top:100px}
+body .tools-tab{min-height:44px}
+body .curriculum-progress span{transition:width .35s ease}
+body :is(.curriculum-card,.schedule-calendar-event){transition:border-color .2s,box-shadow .2s,transform .2s}
+@media(prefers-reduced-motion:reduce){body .curriculum-progress span,body :is(.curriculum-card,.schedule-calendar-event){transition:none}}
