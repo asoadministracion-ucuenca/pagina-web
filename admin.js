@@ -954,10 +954,18 @@ function renderAdmInbox() {
 function emailChip(message) {
   const status = message.emailStatus;
   if (status === 'enviado') return chip('Correo enviado', 'ok');
+  if (status === 'en cola') return chip('Correo en cola', 'info');
   if (status === 'error') return chip('Correo fallido', 'bad');
   if (status === 'sin configurar') return chip('Correo sin configurar', 'warn');
   if (status === 'enviando') return chip('Enviando correo', 'info');
   return '';
+}
+
+function cloudMailCallout(message) {
+  const sent=message.emailStatus==='enviado',queued=message.emailStatus==='en cola';
+  const title=sent?'Correo enviado a la ASO':queued?'Correo pendiente de envío':'Revisar envío de correo';
+  const text=sent?'Apps Script confirmó el envío a asoadmiucuenca@gmail.com.':queued?'La copia se enviará automáticamente. El servicio revisa la bandeja aproximadamente cada minuto; no depende de que el portal esté abierto.':message.emailError||'Puedes volver a poner esta solicitud en la cola de correo.';
+  return `<div class="adm-callout ${sent?'ok':queued?'info':'warn'}">${icon(sent?'check':queued?'clock':'alert')}<div><strong>${title}</strong><p>${esc(text)}</p>${!sent&&!queued?`<button type="button" class="adm-btn ghost sm" data-adm-resend="${attr(message.id)}">${icon('refresh')}<span>Reintentar envío</span></button>`:''}</div></div>`;
 }
 
 function renderMessageDetail(message) {
@@ -970,7 +978,7 @@ function renderMessageDetail(message) {
   const waLink = wa ? `https://wa.me/${wa}?text=${encodeURIComponent(`Hola ${firstName}, te escribimos de la ASO de Administración de Empresas${code ? ` sobre tu solicitud ${code}` : ''}.`)}` : '';
   const history = Array.isArray(message.history) && message.history.length ? message.history : [{ date: message.date, status: 'pendiente', actor: 'Formulario público' }];
   const fields = [['Correo', message.email], ['Teléfono', phone], ['Ciclo', message.cycle], ['Asunto', message.subject], ['Materia', message.materia], ['Producto', message.producto]].filter(([, value]) => value);
-  const email = message.type === 'Consulta' && window.AdeCloudAdmin?.available ? `<div class="adm-callout info">${icon('inbox')}<div><strong>Consulta recibida en la bandeja ASO</strong><p>El seguimiento y las notas se guardan en Firebase. La copia automática al Gmail de la ASO todavía no está conectada.</p></div></div>` : message.type === 'Consulta' ? (message.emailStatus === 'enviado'
+  const email = window.AdeCloudAdmin?.available ? cloudMailCallout(message) : message.type === 'Consulta' ? (message.emailStatus === 'enviado'
     ? `<div class="adm-callout ok">${icon('check')}<div><strong>Envío de correo confirmado</strong><p>Apps Script confirmó el envío a asoadmiucuenca@gmail.com.</p></div></div>`
     : message.emailStatus === 'sin configurar'
       ? `<div class="adm-callout warn">${icon('alert')}<div><strong>El reenvío por correo no está configurado</strong><p>La consulta está guardada aquí. Para recibir una copia en asoadmiucuenca@gmail.com, despliega la versión actual del Apps Script (README → «Consultas al correo de la ASO») y configura la URL en Integraciones.</p><button type="button" class="adm-btn ghost sm" data-adm-resend="${attr(message.id)}">${icon('refresh')}<span>Reintentar envío</span></button></div></div>`
@@ -1015,7 +1023,7 @@ async function admResend(button) {
     await loadAdminInbox();
     renderAdminTabs(); renderAdminContent({ keepScroll: true });
     if (result.emailStatus === 'enviado') showToast('Correo enviado a la ASO', 'El servicio confirmó el envío.', 'success');
-    else if (result.emailStatus === 'enviando') showToast('Envío en cola', 'Puedes seguir trabajando. La bandeja actualizará el resultado automáticamente.', 'success');
+    else if (result.emailStatus === 'enviando'||result.emailStatus === 'en cola') showToast('Envío en cola', 'Puedes seguir trabajando. El servicio revisa los envíos aproximadamente cada minuto.', 'success');
     else showToast(result.emailStatus === 'sin configurar' ? 'Correo sin configurar' : 'El correo no se pudo enviar', result.emailError || 'Revisa la configuración del Apps Script.', 'error');
   } catch (error) { showToast('No se pudo reenviar', error.message, 'error'); button.disabled = false; button.classList.remove('is-loading'); }
 }
@@ -1296,7 +1304,7 @@ function renderAdmConfig() {
       <div class="adm-field full"><label for="adm-c-folder">Carpeta pública de Drive</label><input id="adm-c-folder" name="driveFolderUrl" type="url" value="${attr(settings.driveFolderUrl||'')}" data-adm-config><small class="adm-error" data-error-for="driveFolderUrl"></small></div>
       <div class="adm-field full"><label for="adm-c-script">Lector público de Apps Script (/exec)</label><input id="adm-c-script" name="driveRepositoryApiUrl" type="url" value="${attr(settings.driveRepositoryApiUrl||'')}" data-adm-config><small class="adm-help">Este enlace permite consultar archivos públicos de la carpeta. No pegues contraseñas ni claves privadas.</small><small class="adm-error" data-error-for="driveRepositoryApiUrl"></small></div>
       </div><footer class="adm-card-foot"><button type="submit" class="adm-btn primary">Guardar configuración</button></footer></form>
-      <section class="adm-card"><header class="adm-card-head"><h2>Consultas y correo</h2></header><p>Las solicitudes llegan a la bandeja privada de Firebase. La copia automática al Gmail de la ASO requiere conectar Apps Script por separado.</p></section>`;
+      <section class="adm-card"><header class="adm-card-head"><h2>Consultas y correo</h2><span class="adm-status ${state.mailRelay?'ok':'warn'}">${state.mailRelay?'Servicio conectado':'Pendiente de activar'}</span></header><p>Las solicitudes se guardan en la bandeja privada. Apps Script envía una copia al correo asoadmiucuenca@gmail.com y confirma el resultado en cada solicitud.</p><p class="adm-muted">${state.mailLastRun?'Última revisión: '+esc(ADM.relativeTime(state.mailLastRun)):'Activa el servicio de correo desde el Apps Script de la ASO.'}${state.mailRelay?' · Cuota de destinatarios disponible en la última revisión: '+esc(state.mailQuota):''}</p></section>`;
   return `${pageHead({ kicker: 'Sistema', title: 'Integraciones', text: 'Conexión con Google Drive y con el servicio de correo de la ASO. Las credenciales nunca se guardan en el navegador.' })}
     <form class="adm-card" id="admConfigForm" novalidate><header class="adm-card-head"><div><h2>Repositorio en Google Drive</h2><p>El ID de la carpeta se deriva automáticamente del enlace</p></div></header>
       <div class="adm-form">

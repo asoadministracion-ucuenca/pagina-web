@@ -87,7 +87,7 @@
   function message(document){
     const raw=JSON.parse(document.fields.payload.stringValue),id=document.name.split('/').at(-1),date=document.fields.createdAt.timestampValue;
     const clean=document.fields.edited?.booleanValue?raw:Object.fromEntries(['type','name','email','phone','cycle','subject','message','materia','producto'].filter(key=>typeof raw[key]==='string').map(key=>[key,raw[key]]));
-    return {...clean,id,date,status:document.fields.status.stringValue,trackingCode:'ADE-'+id.slice(0,8).toUpperCase(),...(!document.fields.edited?.booleanValue?{read:false,emailStatus:'sin configurar',history:[{date,status:'pendiente',actor:'Formulario del estudiante'}]}:{})};
+    return {...clean,id,date,status:document.fields.status.stringValue,trackingCode:'ADE-'+id.slice(0,8).toUpperCase(),...(!document.fields.edited?.booleanValue?{read:false,history:[{date,status:'pendiente',actor:'Formulario del estudiante'}]}:{}),emailStatus:document.fields.mailStatus?.stringValue==='enviado'?'enviado':document.fields.mailStatus?.stringValue==='pendiente'?'en cola':document.fields.mailStatus?'error':'sin configurar',emailError:document.fields.mailError?.stringValue||'',emailSentAt:document.fields.mailSentAt?.timestampValue||''};
   }
   async function inbox(all=false){
     const messages=[];let pageToken='';
@@ -109,14 +109,18 @@
     if(clean.type==='Consulta'&&!/^\+?[0-9][0-9 ()-]{6,18}[0-9]$/.test(clean.phone||''))throw fail('Ingresa un número de teléfono válido.');
     if(Object.values(clean).some(value=>/[<>]/.test(value)||value.length>2000))throw fail('Usa texto simple. El mensaje admite hasta 2000 caracteres.');
     const id=crypto.randomUUID().replaceAll('-',''),date=new Date().toISOString();
-    const row={...clean,id,date,trackingCode:'ADE-'+id.slice(0,8).toUpperCase(),read:false,status:'pendiente',emailStatus:'sin configurar',history:[{date,status:'pendiente',actor:'Formulario del estudiante'}]};
-    await http(base+':commit',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+selected},body:JSON.stringify({writes:[{update:{name:base.split('/v1/')[1]+'/inbox/'+id,fields:{owner:{stringValue:user.id},payload:{stringValue:JSON.stringify(clean)},status:{stringValue:'pendiente'},edited:{booleanValue:false}}},updateTransforms:[{fieldPath:'createdAt',setToServerValue:'REQUEST_TIME'}],currentDocument:{exists:false}}]})});
+    const row={...clean,id,date,trackingCode:'ADE-'+id.slice(0,8).toUpperCase(),read:false,status:'pendiente',emailStatus:'en cola',history:[{date,status:'pendiente',actor:'Formulario del estudiante'}]};
+    await http(base+':commit',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+selected},body:JSON.stringify({writes:[{update:{name:base.split('/v1/')[1]+'/inbox/'+id,fields:{owner:{stringValue:user.id},payload:{stringValue:JSON.stringify(clean)},status:{stringValue:'pendiente'},edited:{booleanValue:false},mailStatus:{stringValue:'pendiente'}}},updateTransforms:[{fieldPath:'createdAt',setToServerValue:'REQUEST_TIME'}],currentDocument:{exists:false}}]})});
     return {ok:true,message:row};
   }
   async function updateMessage(data){
     if(!/^[a-f0-9]{32}$/.test(data.id||''))throw fail('Solicitud inválida.');
     const previous=await doc('inbox/'+data.id,true);if(!previous)throw fail('Solicitud no encontrada.',404);
-    if(data.resend)throw fail('La solicitud está en la bandeja. El reenvío automático al correo aún requiere conectar Apps Script.');
+    if(data.resend){
+      if(previous.fields.mailStatus?.stringValue==='enviado')return {ok:true,emailStatus:'enviado'};
+      if(previous.fields.mailStatus?.stringValue!=='pendiente')await commit([{update:{name:previous.name,fields:{mailStatus:{stringValue:'pendiente'}}},updateMask:{fieldPaths:['mailStatus']},updateTransforms:[{fieldPath:'mailRequestedAt',setToServerValue:'REQUEST_TIME'}],currentDocument:{updateTime:previous.updateTime}}]);
+      return {ok:true,emailStatus:'en cola'};
+    }
     // Keep a tombstone so accidental deletes can be recovered from a backup.
     const row=message(previous),now=new Date().toISOString();
     if(data.remove){row.status='archivada';row.archivedAt=now;row.read=true;}
@@ -155,10 +159,10 @@
     if(path==='/api/messages')return sendMessage(data);
     if(path==='/api/message')return updateMessage(data);
     if(path==='/api/admin'||path==='/api/backup'){
-      const [privateDoc,list]=await Promise.all([doc('portal/private',true),inbox(path==='/api/backup')]);
+      const [privateDoc,list,mail]=await Promise.all([doc('portal/private',true),inbox(path==='/api/backup'),doc('portal/mail',true)]);
       const content=unpack(privateDoc)||{...await seed(),audit:[]};
       if(path==='/api/backup')return {ok:true,kind:'aso-ade-backup',version:1,exportedAt:new Date().toISOString(),...content,messages:list.messages};
-      return {ok:true,messages:list.messages,audit:content.audit||[],state:{revision:content.revision,mailRelay:false,cloud:true,inboxHasMore:list.hasMore}};
+      return {ok:true,messages:list.messages,audit:content.audit||[],state:{revision:content.revision,mailRelay:Boolean(mail?.fields.active?.booleanValue),mailLastRun:mail?.fields.checkedAt?.timestampValue||'',mailQuota:Number(mail?.fields.quotaRemaining?.integerValue||0),cloud:true,inboxHasMore:list.hasMore}};
     }
     if(path==='/api/upload')throw fail('Sube el archivo a Drive y pega su enlace HTTPS. Esta versión gratuita no almacena archivos.');
     throw fail('Este servicio todavía no está conectado a la publicación.');
