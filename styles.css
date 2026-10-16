@@ -2952,3 +2952,5 @@ body.dark-mode .information-link-arrow{color: #93b4ff}
 .information-link{transition: none}
 .information-link:hover,.information-link:focus-visible{transform: none}
 }
+
+.app-install-dialog{width:min(92vw,460px);max-height:85dvh;overflow:auto;border:1px solid #d9e1ed;border-radius:20px;padding:26px;color:#17283e;background:#fff}.app-install-dialog::backdrop{background:#10204488;backdrop-filter:blur(4px)}.app-install-dialog h2{margin-top:0}.app-install-dialog p{line-height:1.6}.services-list>[data-install-app]{width:100%;margin-bottom:16px}

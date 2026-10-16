@@ -14,13 +14,13 @@
   <meta property="og:locale" content="es_EC">
   <meta property="og:site_name" content="ASO Administración de Empresas 2026–2027">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="assets/logo-aso-ade-192.png"><meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="styles.css?v=pro-3">
+  <link rel="stylesheet" href="styles.css?v=app-1">
 <link rel="stylesheet" href="design.css?v=mobile-4">
 <link rel="stylesheet" href="home.css?v=pro-5">
 <link rel="stylesheet" href="admin.css?v=adm-1">
@@ -120,7 +120,7 @@
       </div>
       <button class="services-close" id="servicesCloseButton" type="button" aria-label="Cerrar servicios">X</button>
     </div>
-    <nav class="services-list">
+    <nav class="services-list"><button class="btn-primary" type="button" data-install-app>Instalar app</button>
       <a href="#recursos" data-tab="recursos">Actividad Física</a>
 
 
@@ -574,7 +574,7 @@
 
           <article class="portal-card tool-panel" id="toolHorario" data-tool-panel="toolHorario">
             <span class="tool-kicker">Planificación semanal</span>
-            <div class="view-heading"><div><h3>Horario del ciclo actual</h3><p>Arma tu horario por materia hasta quinto ciclo, separado por grupo.</p></div><div class="inline-actions"><button class="btn-secondary" id="printToolsButton" type="button">Imprimir horario</button></div></div>
+            <div class="view-heading"><div><h3>Horario del ciclo actual</h3><p>Arma tu horario por materia y grupo. Puedes imprimirlo o guardarlo como PDF.</p></div><div class="inline-actions"><button class="btn-secondary" id="printToolsButton" type="button">Imprimir horario</button></div></div>
             <div class="portal-form-grid schedule-builder">
               <label><span>Ciclo</span><select id="scheduleCycle"></select></label>
               <label><span>Grupo</span><select id="scheduleGroup"><option>Grupo 1</option><option>Grupo 2</option><option>Grupo 3</option></select></label>
@@ -805,6 +805,7 @@
         <div class="footer-links">
           <a href="#docentes" data-tab="docentes">Docentes</a>
           <a href="#consultas" data-tab="consultas">Consultas</a>
+          <button class="btn-secondary" type="button" data-install-app>Instalar app</button>
           <button class="admin-open" id="adminOpenButton" type="button" aria-label="Abrir panel administrador">Panel administrador</button>
         </div>
       </div>
@@ -936,9 +937,10 @@
     <div><button class="btn-secondary" type="button" data-preview-exit>Volver al editor</button><button class="btn-primary" type="button" data-preview-publish>Publicar portada</button></div>
   </div>
   <button class="back-to-top" id="backToTopButton" type="button" aria-label="Volver arriba">↑</button>
-  <script src="public-config.js" defer></script><script src="runtime.js" defer></script><script src="firebase-config.js" defer></script><script src="firebase-student.js?v=admin-1" defer></script><script src="student-store.js?v=admin-1" defer></script><script src="firebase-admin.js?v=3-mail" defer></script>
+  <script src="public-config.js" defer></script><script src="runtime.js" defer></script><script src="firebase-config.js" defer></script><script src="firebase-student.js?v=admin-1" defer></script><script src="student-store.js?v=performance-1" defer></script><script src="firebase-admin.js?v=3-mail" defer></script>
+  <script src="live-snapshot.js?v=1" defer></script><script src="public-cache.js?v=1" defer></script><script src="pwa.js?v=1" defer></script><script src="print-schedule.js?v=1" defer></script>
   <script src="vendor/purify.min.js" defer></script><script src="experience.js?v=pro-4" defer></script><script src="constants.js?v=ade-v2" defer></script>
-  <script src="curriculum.js?v=2" defer></script><script src="portal.js?v=cloud-admin-1" defer></script><script src="admin.js?v=cloud-1" defer></script><script src="student-account.js?v=1" defer></script>
+  <script src="curriculum.js?v=2" defer></script><script src="portal.js?v=performance-1" defer></script><script src="admin.js?v=cloud-1" defer></script><script src="student-account.js?v=1" defer></script>
 
 </body>
 </html>

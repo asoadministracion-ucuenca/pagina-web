@@ -364,8 +364,8 @@ document.addEventListener('focusout', () => setTimeout(() => {
     let economicNewsScheduled = false;
     let economicIndicatorsTimer = null;
     let economicIndicatorsScheduled = false;
-    const ECONOMIC_INDICATORS_REFRESH = 60 * 1000;
-    const ECONOMIC_NEWS_REFRESH = 10 * 60 * 1000;
+    const ECONOMIC_INDICATORS_REFRESH = window.AdeLiveSnapshot?.available ? 30*60*1000 : 60*1000;
+    const ECONOMIC_NEWS_REFRESH = window.AdeLiveSnapshot?.available ? 30*60*1000 : 10*60*1000;
     let heroClockTimer = null;
     let activeApp = null;
     let activeAppMode = null;
@@ -1690,14 +1690,14 @@ document.addEventListener('focusout', () => setTimeout(() => {
 
     // Indicators refresh every minute and news every ten minutes while the home page is on screen.
     function liveServicesUnavailable() {
-      return Boolean(window.AdeRuntime?.staticMode && !window.AdeRuntime.backendAvailable);
+      return Boolean(window.AdeRuntime?.staticMode && !window.AdeRuntime.backendAvailable && !window.AdeLiveSnapshot?.available);
     }
 
     function startEconomicIndicatorUpdates() {
       if (liveServicesUnavailable()) return;
       scheduleEconomicIndicatorLoad();
       if (economicIndicatorsTimer) clearInterval(economicIndicatorsTimer);
-      economicIndicatorsTimer = setInterval(refreshLiveHomeData, 15 * 1000);
+      economicIndicatorsTimer = setInterval(refreshLiveHomeData, window.AdeLiveSnapshot?.available ? 60000 : 15000);
       document.addEventListener("visibilitychange", refreshLiveHomeData);
     }
 
@@ -1723,9 +1723,12 @@ document.addEventListener('focusout', () => setTimeout(() => {
       economicIndicatorsAt = Date.now();
       if (!economicIndicators) el.economicIndicators.innerHTML = DOMPurify.sanitize(`<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>`);
       try {
-        const response = await fetch(window.AdeRuntime ? window.AdeRuntime.apiUrl('/api/indicadores') : '/api/indicadores', { cache: "no-store", signal: AbortSignal.timeout(15000) });
-        if (!response.ok) throw new Error("No response");
-        economicIndicators = await response.json();
+        if(window.AdeLiveSnapshot?.available)economicIndicators=await window.AdeLiveSnapshot.get('indicators');
+        else{
+          const response = await fetch(window.AdeRuntime ? window.AdeRuntime.apiUrl('/api/indicadores') : '/api/indicadores', { cache: "no-store", signal: AbortSignal.timeout(15000) });
+          if (!response.ok) throw new Error("No response");
+          economicIndicators = await response.json();
+        }
         economicIndicatorsFailed = false;
       } catch {
         economicIndicatorsFailed = true;
@@ -1752,7 +1755,7 @@ document.addEventListener('focusout', () => setTimeout(() => {
       if (el.exchangeStatus) {
         const time = new Date(economicIndicators.updatedAt).toLocaleTimeString("es-EC", { hour: "2-digit", minute: "2-digit", timeZone: "America/Guayaquil" });
         const old = economicIndicatorsFailed || economicIndicators.stale;
-        el.exchangeStatus.textContent = `${old ? "Último dato disponible" : "En vivo"} · ${economicIndicators.source} · actualizado ${time} · variación del día`;
+        el.exchangeStatus.textContent = `${old ? "Último dato disponible" : window.AdeLiveSnapshot?.available ? "Referencia" : "En vivo"} · ${economicIndicators.source} · actualizado ${time} · variación del día`;
       }
     }
 
@@ -1855,9 +1858,13 @@ document.addEventListener('focusout', () => setTimeout(() => {
       economicNewsAt = Date.now();
       if (firstLoad || manual) el.economicNewsList.innerHTML = DOMPurify.sanitize(`<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>`);
       try {
-        const response = await fetch(window.AdeRuntime ? window.AdeRuntime.apiUrl('/api/noticias') : '/api/noticias', { cache: "no-store", signal: AbortSignal.timeout(15000) });
-        if (!response.ok) throw new Error("Noticias no disponibles");
-        const data = await response.json();
+        let data;
+        if(window.AdeLiveSnapshot?.available)data=await window.AdeLiveSnapshot.get('news',manual);
+        else{
+          const response = await fetch(window.AdeRuntime ? window.AdeRuntime.apiUrl('/api/noticias') : '/api/noticias', { cache: "no-store", signal: AbortSignal.timeout(15000) });
+          if (!response.ok) throw new Error("Noticias no disponibles");
+          data = await response.json();
+        }
         if (!data.items?.length) throw new Error("Sin titulares");
         renderEconomicNewsItems(data.items, data);
       } catch {
@@ -4537,9 +4544,11 @@ document.addEventListener('focusout', () => setTimeout(() => {
     }
 
     function printScheduleCalendar() {
-      scheduleViewMode = "calendar";
-      renderSchedule();
-      setTimeout(() => window.print(), 80);
+      const cycleId=el.scheduleCycle.value,group=el.scheduleGroup.value||'Grupo 1';
+      const days=['Lunes','Martes','Miércoles','Jueves','Viernes'];
+      const items=(appData.studentSchedules||[]).filter(item=>item.cycleId===cycleId&&(item.group||'Grupo 1')===group).sort((a,b)=>days.indexOf(a.day)-days.indexOf(b.day)||String(a.start).localeCompare(String(b.start)));
+      const opened=window.AdeSchedulePrint?.open({markup:renderScheduleCalendar(items),title:'Mi horario · ASO ADE',subtitle:(findCycle(cycleId)?.name||'')+' · '+group});
+      if(!opened)showToast('Abrir horario para imprimir','Permite la ventana emergente del portal y vuelve a pulsar Imprimir horario.','info');
     }
 
     function startPomodoro() {
@@ -5708,7 +5717,9 @@ document.addEventListener('focusout', () => setTimeout(() => {
         if (options.refresh) endpoint.searchParams.set("refresh", "1");
         endpoint.searchParams.set("_", Date.now().toString());
         const payload = window.AdeRuntime?.staticMode && !window.AdeRuntime.backendAvailable
-          ? await readDriveRepositoryPayload(endpoint)
+          ? window.AdeLiveSnapshot?.available&&!options.refresh
+            ? await window.AdeLiveSnapshot.get('drive').catch(()=>readDriveRepositoryPayload(endpoint))
+            : await readDriveRepositoryPayload(endpoint)
           : await portalApi('/api/drive' + (options.refresh ? '?refresh=1' : ''));
         if (payload && payload.ok === false) throw new Error(payload.error || "Apps Script devolvió un error.");
         if (payload.rootFolderId && payload.rootFolderId !== DRIVE_ROOT_FOLDER_ID) throw new Error("El lector responde a otra carpeta de Drive. Revisa la configuración.");
@@ -6535,7 +6546,7 @@ document.addEventListener('focusout', () => setTimeout(() => {
         } finally {
           sharedDataRefreshInFlight = false;
         }
-      }, window.AdeCloudAdmin?.available ? 300000 : 60000);
+      }, window.AdeCloudAdmin?.available ? 1800000 : 60000);
     }
 
     async function syncCriticalCollectionsToSheets() {
@@ -6717,7 +6728,11 @@ document.addEventListener('focusout', () => setTimeout(() => {
 let publicContentResponse = null;
 async function portalApi(url, data) {
  if(location.protocol === 'file:') throw Error('Abre http://127.0.0.1:4173 para usar el panel. El archivo HTML por sí solo no conecta con el servidor.');
- if(typeof window!=='undefined' && window.AdeCloudAdmin?.available && ['/api/content','/api/login','/api/logout','/api/session','/api/admin','/api/message','/api/messages','/api/backup','/api/upload'].includes(url.split('?')[0])) return window.AdeCloudAdmin.request(url,data);
+ if(typeof window!=='undefined' && window.AdeCloudAdmin?.available && ['/api/content','/api/login','/api/logout','/api/session','/api/admin','/api/message','/api/messages','/api/backup','/api/upload'].includes(url.split('?')[0])){
+   const load=()=>window.AdeCloudAdmin.request(url,data);
+   if(url==='/api/content'&&data===undefined&&window.AdePublicContentCache)return window.AdePublicContentCache.read(load);
+   const result=await load();if(url==='/api/content'&&data!==undefined)window.AdePublicContentCache?.invalidate();return result;
+ }
  const publicRequest = url === '/api/content' && data === undefined;
  const runtime = typeof window !== 'undefined' ? window.AdeRuntime : null;
  const endpoint = runtime?.staticMode && !runtime.backendAvailable && publicRequest

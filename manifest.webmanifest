@@ -3,17 +3,24 @@
   "short_name": "ADE UCuenca",
   "description": "Portal de estudiantes y representantes de Administración de Empresas de la Universidad de Cuenca.",
   "lang": "es-EC",
-  "start_url": "./index.html",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f5f7fa",
   "theme_color": "#324cd4",
   "icons": [
     {
-      "src": "favicon.svg",
-      "sizes": "any",
+      "src": "assets/logo-aso-ade-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/app-icon.svg",
+      "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "id": "./"
 }

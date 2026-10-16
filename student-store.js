@@ -24,6 +24,7 @@
   let pending = parse(native.getItem(ns() + '_pending'), {});
   let base = parse(native.getItem(ns() + '_base'), {revision:0,values:{}});
   let status = session ? 'connecting' : 'local', conflict = null, flight = null, timer;
+  let lastRemoteRead=0;
   const emit = name => window.dispatchEvent(new CustomEvent(name));
   const report = next => { status = next; emit('ade-student-status'); };
   const persistPending = () => native.setItem(ns() + '_pending', JSON.stringify(pending));
@@ -38,7 +39,7 @@
   }
   async function api(path, data, selected = session) {
     if(firebase){
-      try{return await window.AdeFirebase.request(path,data,selected);}
+      try{const result=await window.AdeFirebase.request(path,data,selected);if(path==='state')lastRemoteRead=Date.now();return result;}
       finally{if(selected&&selected===session)window.sessionStorage.setItem(sessionKey,JSON.stringify(selected));}
     }
     const endpoint = window.AdeRuntime.apiUrl('/api/student/' + path);
@@ -195,10 +196,10 @@
     getState:()=>({user:session?.user||null,status,conflict:Boolean(conflict),pending:Object.keys(pending).length})
   });
   window.addEventListener('online',()=>void refresh());
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden) void refresh();});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-lastRemoteRead>(firebase?300000:0)) void refresh();});
   window.addEventListener('storage',event=>{ if(event.key?.startsWith(ns()) && !event.key.slice(ns().length).startsWith('_')) emit('ade-student-data'); });
   setInterval(()=>{
     if (!document.hidden && !document.activeElement?.matches('input,textarea,select')) void refresh();
-  },firebase?300000:30000);
+  },firebase?900000:30000);
   document.addEventListener('DOMContentLoaded',()=>{if(session) void refresh();});
 })();
