@@ -7,10 +7,10 @@
   try{cache=JSON.parse(localStorage.getItem(key)||'null');}catch{}
   function valid(value){return value?.version===1&&['news','indicators'].every(name=>Array.isArray(value[name]?.items));}
   async function read(force=false){
-    if(!force&&cache&&Date.now()-cache.at<1800000&&valid(cache.data))return cache.data;
+    if(!force&&cache&&Date.now()-cache.at<300000&&valid(cache.data))return cache.data;
     if(flight)return flight;
     flight=(async()=>{
-      for(const url of [remote,new URL('./live-data.json',document.baseURI).href]){
+      for(const url of [remote+'?v='+Math.floor(Date.now()/300000),new URL('./live-data.json',document.baseURI).href]){
         try{
           const response=await fetch(url,{credentials:'omit',cache:'no-cache',signal:AbortSignal.timeout(8000)});
           if(!response.ok)continue;

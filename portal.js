@@ -6531,7 +6531,18 @@ document.addEventListener('focusout', () => setTimeout(() => {
 }
 
     
+    let automaticDriveRefreshTimer = null;
+    async function refreshDriveAutomatically() {
+      if (document.visibilityState === 'hidden' || isAdmin || driveRepositoryStatus.loading || Date.now()-lastAutomaticDriveRefresh<300000) return;
+      lastAutomaticDriveRefresh=Date.now();
+      await loadDriveRepositoryResources();
+      refreshVisibleDataAfterSync(['resources']);
+    }
     function startSharedDataRefresh() {
+      clearInterval(automaticDriveRefreshTimer);
+      automaticDriveRefreshTimer=setInterval(refreshDriveAutomatically,60000);
+      document.removeEventListener('visibilitychange',refreshDriveAutomatically);
+      document.addEventListener('visibilitychange',refreshDriveAutomatically);
       if (sharedDataRefreshTimer) clearInterval(sharedDataRefreshTimer);
       sharedDataRefreshTimer = window.setInterval(async () => {
         if (isAdmin || document.visibilityState === "hidden" || sharedDataRefreshInFlight) return;
