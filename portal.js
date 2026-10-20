@@ -590,6 +590,7 @@ document.addEventListener('focusout', () => setTimeout(() => {
       el.appPanelClose?.addEventListener("click", closeApp);
       el.appModalClose?.addEventListener("click", closeApp);
       document.addEventListener("click", (event) => {
+        if (event.target.closest("[data-drive-refresh]")) return handleBancoClick(event);
         if (!event.target.closest("[data-open-drive-repo]")) return;
         openDriveRepositoryNotice();
         setMobileMenuOpen(false);
@@ -4834,16 +4835,17 @@ document.addEventListener('focusout', () => setTimeout(() => {
       </article>`;
     }
     function handleBancoClick(event) {
-      const syncDrive = event.target.closest("[data-banco-drive-sync]");
+      const syncDrive = event.target.closest("[data-banco-drive-sync], [data-drive-refresh]");
       const previewPdf = event.target.closest("[data-preview-pdf]");
       const add = event.target.closest("[data-banco-add]");
       const calendar = event.target.closest("[data-calendar-exam]");
       if (syncDrive) {
         syncDrive.disabled = true;
         syncDrive.textContent = "Sincronizando...";
-        loadDriveRepositoryResources().then(() => {
+        loadDriveRepositoryResources({ refresh: true }).then(() => {
           refreshVisibleDataAfterSync(["resources"]);
-          showToast("Drive actualizado", "Se volvió a cargar el banco de exámenes desde Google Drive.", "success");
+          if (driveRepositoryStatus.error) throw new Error(driveRepositoryStatus.error);
+          showToast("Drive actualizado", "Se volvió a cargar el catálogo de materiales desde Google Drive.", "success");
         }).catch(() => {
           renderBanco();
           showToast("No se pudo sincronizar", "Revisa la implementación de Apps Script y los permisos de Drive.", "error");
@@ -5722,6 +5724,7 @@ document.addEventListener('focusout', () => setTimeout(() => {
             : await readDriveRepositoryPayload(endpoint)
           : await portalApi('/api/drive' + (options.refresh ? '?refresh=1' : ''));
         if (payload && payload.ok === false) throw new Error(payload.error || "Apps Script devolvió un error.");
+        if (payload?.stale) throw new Error("El catálogo compartido no se ha actualizado. Reintenta la sincronización o espera la siguiente actualización automática.");
         if (payload.rootFolderId && payload.rootFolderId !== DRIVE_ROOT_FOLDER_ID) throw new Error("El lector responde a otra carpeta de Drive. Revisa la configuración.");
         const driveResources = applyDriveRepositoryPayload(payload);
         try {
@@ -5743,7 +5746,7 @@ document.addEventListener('focusout', () => setTimeout(() => {
 
     async function readDriveRepositoryPayload(endpoint) {
       try {
-        const response = await fetch(endpoint.toString(), { cache: "no-store" });
+        const response = await fetch(endpoint.toString(), { cache: "no-store", signal: AbortSignal.timeout(120000) });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const text = await response.text();
         if (/accounts\.google|ServiceLogin|signin|Inicia sesi[oó]n/i.test(text)) {
@@ -5786,7 +5789,7 @@ document.addEventListener('focusout', () => setTimeout(() => {
         const timeout = window.setTimeout(() => {
           cleanup();
           reject(new Error("tiempo de espera agotado"));
-        }, 20000);
+        }, 120000);
         const cleanup = () => {
           if (finished) return;
           finished = true;
@@ -5881,6 +5884,7 @@ document.addEventListener('focusout', () => setTimeout(() => {
     }
 
     function renderDriveRepositoryStatus() {
+      const refreshButton = '<button class="mini-action" type="button" data-drive-refresh>Actualizar materiales</button>';
       if (!driveRepositoryStatus.enabled) {
         const folderUrl = appData.settings.driveFolderUrl || appData.settings.simplifiedDriveUrl || DRIVE_FOLDER_URL;
         return folderUrl
@@ -5910,9 +5914,9 @@ document.addEventListener('focusout', () => setTimeout(() => {
         const statusTitle = missingDeployment && driveRepositoryStatus.count
           ? "Drive pendiente · materiales guardados disponibles"
           : "No se pudo sincronizar Drive";
-        return `<div class="drive-sync-card error"><strong>${statusTitle}</strong><span>${escapeHtml(driveRepositoryStatus.error)}. ${helpText}${cacheText}</span><a class="mini-action" href="${escapeAttribute(driveRepositoryUrl())}" target="_blank" rel="noopener noreferrer">Abrir carpeta Drive</a></div>`;
+        return `<div class="drive-sync-card error"><strong>${statusTitle}</strong><span>${escapeHtml(driveRepositoryStatus.error)}. ${helpText}${cacheText}</span>${refreshButton}<a class="mini-action" href="${escapeAttribute(driveRepositoryUrl())}" target="_blank" rel="noopener noreferrer">Abrir carpeta Drive</a></div>`;
       }
-      return `<div class="drive-sync-card success"><strong>Drive de ASO conectado</strong><span>${driveRepositoryStatus.count} documentos públicos disponibles${driveRepositoryStatus.updatedAt ? ` · ${formatDate(driveRepositoryStatus.updatedAt)}` : ""}${driveRepositoryStatus.count ? "" : ". Añade materiales compartidos en Repositorio ADE para que aparezcan aquí."}</span><a class="mini-action" href="${escapeAttribute(driveRepositoryUrl())}" target="_blank" rel="noopener noreferrer">Abrir Repositorio ADE</a></div>`;
+      return `<div class="drive-sync-card success"><strong>Drive de ASO conectado</strong><span>${driveRepositoryStatus.count} documentos públicos disponibles${driveRepositoryStatus.updatedAt ? ` · ${formatDate(driveRepositoryStatus.updatedAt)}` : ""}${driveRepositoryStatus.count ? "" : ". Añade materiales compartidos en Repositorio ADE para que aparezcan aquí."}</span>${refreshButton}<a class="mini-action" href="${escapeAttribute(driveRepositoryUrl())}" target="_blank" rel="noopener noreferrer">Abrir Repositorio ADE</a></div>`;
     }
 
     async function saveMessage(payload) {

@@ -2,7 +2,7 @@
   'use strict';
   const available=Boolean(window.AdeRuntime?.staticMode&&!window.AdeRuntime.backendAvailable);
   const remote='https://raw.githubusercontent.com/asoadministracion-ucuenca/pagina-web/main/live-data.json';
-  const key='ade-live-snapshot-v1:'+new URL('.',document.baseURI).pathname;
+  const key='ade-live-snapshot-v2:'+new URL('.',document.baseURI).pathname;
   let cache=null,flight=null;
   try{cache=JSON.parse(localStorage.getItem(key)||'null');}catch{}
   function valid(value){return value?.version===1&&['news','indicators'].every(name=>Array.isArray(value[name]?.items));}
