@@ -6,6 +6,7 @@ const previous=JSON.parse(await readFile(file,'utf8').catch(()=>'{}'));
 const service=createLiveData();
 const result={version:1,generatedAt:new Date().toISOString()};
 for(const [key,load]of Object.entries(service)){
+  if(previous[key]?.ok && Date.now()-Date.parse(previous[key].updatedAt)<3600000){result[key]=previous[key];continue;}
   try{result[key]={...await load(),refreshSeconds:3600};}
   catch(error){
     console.error(key+': '+error.message);
